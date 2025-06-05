@@ -1,0 +1,104 @@
+/* Devices.css */
+
+.device-container {
+    display: flex;
+    justify-content: space-around;
+    padding: 30px;
+    background: linear-gradient(to right, #f0f4f8, #e0f7fa);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .inverter-card {
+    width: 45%;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    padding: 20px 30px;
+    animation: fadeIn 0.3s ease-in-out;
+    transition: transform 0.3s;
+  }
+  
+  .inverter-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .battery-inverter {
+    border-left: 5px solid #4caf50;
+  }
+  
+  .solar-inverter {
+    border-left: 5px solid #ff9800;
+  }
+  
+  h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .param {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .inverter-status,
+  .comm-status {
+    margin: 10px 0;
+    font-size: 16px;
+  }
+  
+  .status {
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-left: 10px;
+    color: white;
+  }
+  
+  .status.charging {
+    background-color: #00c853;
+  }
+  
+  .status.invert {
+    background-color: #0288d1;
+  }
+  
+  .status.idle {
+    background-color: #9e9e9e;
+  }
+  
+  .status.gen {
+    background-color: #ff9800;
+  }
+  
+  .connected {
+    color: #2e7d32;
+    font-weight: bold;
+  }
+  
+  .disconnected {
+    color: #c62828;
+    font-weight: bold;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .dashboard-sidebar {
+    background-color: #2671ea;
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    flex: 1;
+    max-width: 250px;
+  }

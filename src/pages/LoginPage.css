@@ -1,0 +1,112 @@
+/* LoginPage.css */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to bottom right, #e6f0f8, #ffffff);
+  }
+  
+  .login-box {
+    background-color: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    text-align: center;
+    width: 350px;
+    height: 500px;
+  }
+  
+  .login-logo {
+    width: 120px;
+    margin-bottom: 50px;
+    margin-top: 30px;
+  }
+  
+  .login-title {
+    font-size: 22px;
+    margin-bottom: 30px;
+    color: #1e55ec;
+  }
+  
+  .login-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    font-size: 16px;
+    box-sizing: border-box;
+    
+  }
+  
+  .login-input:focus {
+    border-color: #1e55ec;
+    outline: none;
+  }
+  
+.login-button {
+  width: 100%;                     /* Take full width of the container */
+  padding: 12px;
+  background-color: #1e55ec;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 20px;
+  text-align: center;              /* Center the text inside the button */
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto; /* ✅ Center horizontally */
+}
+
+
+  
+  .login-button:hover {
+    background-color: #163fc4;
+  }
+  
+/* ✅ Wrapper: Relative to contain the absolute-positioned button */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+  }
+  
+  /* ✅ Button: Positioned inside the password input */
+.show-password-btn {
+  position: absolute;
+  top: 18%;                          /* Perfect vertical centering */
+  right: 0px;                       /* Slightly inside the input's right */
+  transform: translateY(-90%);       /* Align middle vertically */
+  background: none;
+  color: black;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+  .error-message {
+    color: red;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 0.95rem;
+    background-color: #ffffff54;
+    padding: 8px 12px;
+    border-radius: 8px;
+    gap: 8px;
+  }
+
+  .error-icon {
+    font-size: 1.2rem;
+    color: red;
+  }
+  
+  
