@@ -4,6 +4,7 @@ import './Settings.css';
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools, FaUsers, FaCog, FaQuestionCircle, FaUserCircle, FaBell, FaSignOutAlt} from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 export default function Settings() {
 
@@ -35,16 +36,17 @@ export default function Settings() {
     // Add real logic to change password
     setMessage('Password changed successfully.');
   };
-
+const navigate = useNavigate();
   const handleLogout = () => {
     // Add logout logic (e.g., clearing token, redirecting)
-    alert('Logged out!');
+    navigate('/Loginpage');
   };
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
     document.body.classList.toggle('dark-mode');
   };
+
 
   return (
 
@@ -73,7 +75,7 @@ export default function Settings() {
               <FaCog className="dropdown-icon" />
               Settings
             </div>
-            <div className="dropdown-item">
+            <div className="dropdown-item"onClick={handleLogout}>
               <FaSignOutAlt className="dropdown-icon" />
               Logout
             </div>

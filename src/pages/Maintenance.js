@@ -3,6 +3,7 @@ import './Maintenance.css';
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools, FaUsers, FaCog, FaQuestionCircle, FaUserCircle, FaBell, FaSignOutAlt} from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const mockAlarms = [
   { id: 1, time: '2025-05-05 09:32', inverter: 'Inverter A', message: 'Overtemperature detected', severity: 'High' },
@@ -23,6 +24,12 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
       setDropdownOpen(!dropdownOpen);
     };
 
+
+    const navigate = useNavigate();
+    const handleLogout = () => {
+      // clear tokens or session here if any
+      navigate('/Loginpage');
+    };
   return (
 
     <div className="dashboard-container">
@@ -50,7 +57,7 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
           <FaCog className="dropdown-icon" />
           Settings
         </div>
-        <div className="dropdown-item">
+        <div className="dropdown-item"onClick={handleLogout}>
           <FaSignOutAlt className="dropdown-icon" />
           Logout
         </div>

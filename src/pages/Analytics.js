@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import axios from "axios";
 import './Analytics.css';
+import { useNavigate } from 'react-router-dom';
 
 import {
   LineChart,
@@ -23,6 +24,7 @@ export default function Analytics() {
   const location = useLocation();
   const username = location.state?.username;
   const firstName = location.state?.firstName;
+  
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -71,6 +73,11 @@ export default function Analytics() {
     return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
   };
 
+const navigate = useNavigate();
+const handleLogout = () => {
+  // clear tokens or session here if any
+  navigate('/Loginpage');
+};
   return (
     <div className="dashboard-container">
       {/* Header */}
@@ -97,7 +104,7 @@ export default function Analytics() {
                 <FaCog className="dropdown-icon" />
                 Settings
               </div>
-              <div className="dropdown-item">
+              <div className="dropdown-item" onClick={handleLogout}>
                 <FaSignOutAlt className="dropdown-icon" />
                 Logout
               </div>

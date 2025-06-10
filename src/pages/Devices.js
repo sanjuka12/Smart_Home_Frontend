@@ -4,6 +4,7 @@ import "./Devices.css";
 import React, { useState } from "react";
 import { FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools, FaUsers, FaCog, FaQuestionCircle, FaUserCircle, FaBell, FaSignOutAlt} from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Devices = () => {
 
@@ -39,7 +40,11 @@ const Devices = () => {
       setDropdownOpen(!dropdownOpen);
     };
 
-
+const navigate = useNavigate();
+const handleLogout = () => {
+  // clear tokens or session here if any
+  navigate('/Loginpage');
+};
 
   return (
     <div className="dashboard-container">
@@ -66,7 +71,7 @@ const Devices = () => {
                 <FaCog className="dropdown-icon" />
                 Settings
               </div>
-              <div className="dropdown-item">
+              <div className="dropdown-item"onClick={handleLogout}>
                 <FaSignOutAlt className="dropdown-icon" />
                 Logout
               </div>
