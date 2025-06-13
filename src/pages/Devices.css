@@ -8,91 +8,76 @@
     min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
+
+.device-cards-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  gap: 30 px;
+  padding: 40px;
+  flex: 1;
+  background-color: white;
+}
+
+
+  .device-card {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 15px;
+  width: 350px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0);
+  margin-top: -60px;
+}
+.sidebar {
+  width: 250px;
+  background-color: #4f46e5;
+  color: white;
+  padding: 20px;
+}
+
+  .status-text {
+  font-size: 14px;
+  text-align: center;
+  color: green;
+  margin-bottom: 10px;
   
-  .inverter-card {
-    width: 45%;
-    background-color: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-    padding: 20px 30px;
-    animation: fadeIn 0.3s ease-in-out;
-    transition: transform 0.3s;
-  }
-  
-  .inverter-card:hover {
-    transform: translateY(-5px);
-  }
-  
-  .battery-inverter {
-    border-left: 5px solid #4caf50;
-  }
-  
-  .solar-inverter {
-    border-left: 5px solid #ff9800;
-  }
-  
-  h2 {
-    font-size: 24px;
-    margin-bottom: 15px;
-    color: #333;
-  }
-  
-  .param {
-    margin: 10px 0;
-    font-size: 16px;
-    color: #555;
-  }
-  
-  .inverter-status,
-  .comm-status {
-    margin: 10px 0;
-    font-size: 16px;
-  }
-  
-  .status {
-    font-weight: bold;
-    padding: 2px 8px;
-    border-radius: 6px;
-    margin-left: 10px;
-    color: white;
-  }
-  
-  .status.charging {
-    background-color: #00c853;
-  }
-  
-  .status.invert {
-    background-color: #0288d1;
-  }
-  
-  .status.idle {
-    background-color: #9e9e9e;
-  }
-  
-  .status.gen {
-    background-color: #ff9800;
-  }
-  
-  .connected {
-    color: #2e7d32;
-    font-weight: bold;
-  }
-  
-  .disconnected {
-    color: #c62828;
-    font-weight: bold;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+}
+
+.gauge-chart {
+  width: 220px;
+  height: 220px;
+  margin: 0 auto 20px;
+}
+
+/* Gauge label */
+.gauge-label {
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Info row styling */
+.info-row {
+  background-color: #99BDFF;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+/* Small status badge */
+.badge {
+  background-color: #c7d2fe;
+  border: 2px solid #c7d2fe;
+  border-radius: 8px;
+  padding: 2px 8px;
+  font-size: 15px;
+}
+
+ 
   
   .dashboard-sidebar {
     background-color: #2671ea;
