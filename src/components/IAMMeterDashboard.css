@@ -408,7 +408,7 @@ body {
 }
 
 .notification-item {
-  background-color: #0083f542;           /* Light grey background */
+  background-color: #106ee241;           /* Light grey background */
   border-radius: 8px;                  /* Rounded corners */
   padding: 12px 16px;                  /* Space inside the item */
   margin-bottom: 4px;                 /* Gap between notifications */
@@ -420,7 +420,7 @@ body {
 
 .notification-message {
   font-weight: bold;
-  color: rgba(0, 0, 0, 0.823);
+  color: rgba(0, 0, 0, 0.693);
   font-size: 14px;
   
 }

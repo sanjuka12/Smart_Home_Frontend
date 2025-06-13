@@ -8,6 +8,8 @@ import LoginPage from './pages/LoginPage';
 import Maintenance from './pages/Maintenance';
 import Users from './pages/Users';
 import Settings from './pages/Settings';
+import Weather from './pages/weather';
+
 
 function App() {
   return (
@@ -21,6 +23,7 @@ function App() {
         <Route path="/Maintenance" element={<Maintenance />} />
         <Route path="/users" element={<Users />} />
         <Route path="/Settings" element={<Settings />} />
+       <Route path="/weather" element={<Weather />} />
         
 
       </Routes>

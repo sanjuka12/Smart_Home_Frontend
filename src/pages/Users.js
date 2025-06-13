@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools, FaUsers,FaUserPlus, FaCog, FaQuestionCircle, FaUserCircle, FaBell, FaSignOutAlt} from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function Users() {
 
@@ -30,6 +31,12 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
   ]);
 
   const filteredUsers = users.filter(user => !filterDate || user.date === filterDate);
+
+const navigate = useNavigate();
+const handleLogout = () => {
+  // clear tokens or session here if any
+  navigate('/Loginpage');
+};
 
   return (
 
@@ -58,7 +65,7 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
           <FaCog className="dropdown-icon" />
           Settings
         </div>
-        <div className="dropdown-item">
+        <div className="dropdown-item"onClick={handleLogout}>
           <FaSignOutAlt className="dropdown-icon" />
           Logout
         </div>

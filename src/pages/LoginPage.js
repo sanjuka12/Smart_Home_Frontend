@@ -4,6 +4,7 @@ import './LoginPage.css';
 import { FaEye, FaEyeSlash, FaTimesCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
+
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -14,7 +15,9 @@ export default function LoginPage() {
   const passwordRef = useRef(null);
   const navigate = useNavigate();
 
-  
+  const apiUrl = 'http://localhost:3000/api';
+ /* const apiUrl = 'https://smart-home-backend-theta.vercel.app/api';*/
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,7 +25,7 @@ export default function LoginPage() {
     setPasswordError(false);
 
     try {
-      const response = await fetch('http://localhost:3000/api/login', {
+      const response = await fetch(`${apiUrl}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +61,7 @@ export default function LoginPage() {
     }
 
 try {
-    const response = await fetch('http://localhost:3000/api/login', {
+    const response = await fetch(`${apiUrl}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -75,7 +78,7 @@ try {
       console.log("Login success:", data);
 
       // ✅ After login success, send login log to /api/userlog
-      await fetch('http://localhost:3000/api/userlog', {
+      await fetch(`${apiUrl}/userlog`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -107,6 +110,10 @@ try {
 
 
   };
+
+
+
+
 
   return (
     <div className="login-container">

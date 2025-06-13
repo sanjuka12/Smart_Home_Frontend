@@ -7,7 +7,7 @@ import PowerChart from "./PowerChart";
 import PowerFlowDiagram from './PowerFlowDiagram';
 import EnergyAnalysis from './EnergyAnalysis';
 import { FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools, FaUsers, FaCog, FaQuestionCircle, FaUserCircle, FaBell, FaSignOutAlt} from 'react-icons/fa';
-
+import { useNavigate } from 'react-router-dom';
 
 
 export default function IAMMeterDashboard() {
@@ -55,7 +55,11 @@ useEffect(() => {
     document.removeEventListener("mousedown", handleClickOutside);
   };
 }, []);
-
+const navigate = useNavigate();
+const handleLogout = () => {
+  // clear tokens or session here if any
+  navigate('/Loginpage');
+};
 
   return (
     <div className="dashboard-container">
@@ -85,7 +89,7 @@ useEffect(() => {
     <FaCog className="dropdown-icon" />
     Settings
   </div>
-  <div className="dropdown-item">
+  <div className="dropdown-item"onClick={handleLogout}>
     <FaSignOutAlt className="dropdown-icon" />
     Logout
   </div>
