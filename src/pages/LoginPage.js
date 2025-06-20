@@ -15,8 +15,8 @@ export default function LoginPage() {
   const passwordRef = useRef(null);
   const navigate = useNavigate();
 
-  const apiUrl = 'http://localhost:3000/api';
- /* const apiUrl = 'https://smart-home-backend-theta.vercel.app/api';*/
+  /*const apiUrl = 'http://localhost:3000/api';*/
+  const apiUrl = 'https://smart-home-backend-three.vercel.app';
 
 
   const handleLogin = async (e) => {
