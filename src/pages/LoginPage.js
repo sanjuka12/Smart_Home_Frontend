@@ -16,7 +16,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   /*const apiUrl = 'http://localhost:3000/api';*/
-  const apiUrl = 'https://smart-home-backend-three.vercel.app';
+  const apiUrl = 'https://smart-home-backend-jv5h.onrender.com';
 
 
   const handleLogin = async (e) => {
