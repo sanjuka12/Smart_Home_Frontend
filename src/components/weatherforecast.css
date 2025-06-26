@@ -1,0 +1,113 @@
+.forecast-container {
+  position: absolute;
+  top: 53.8%;         /* Adjust as needed for vertical placement */
+  left: 0;           /* Adjust as needed for horizontal placement */
+  width: 700px;
+  padding: 15px;
+  background:  #118bf5b9;
+  border-radius: 1px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  z-index: 999;      /* Makes sure it's on top of other content */
+}
+
+.forecast-container.small {
+  clear: both; /* ensures it sits below floated elements */
+  max-width: 53%;
+  width: 100%; /* or exact width */
+  
+}
+
+.forecast-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 1.4rem;
+}
+
+.forecast-container.small h2 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+.forecast-bar {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.forecast-day {
+  background: #fff;
+  border-radius: 10px;
+  padding: 12px;
+  flex: 1 1 120px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+  cursor: default;
+}
+
+.forecast-container.small .forecast-day {
+  padding: 8px;
+  flex: 1 1 80px; /* smaller boxes */
+}
+
+
+.date {
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #444;
+  font-size: 1.1em;
+}
+
+.forecast-container.small .date {
+  font-size: 0.9em;
+  margin-bottom: 6px;
+}
+
+.icon {
+  font-size: 2.6rem;
+  margin-bottom: 6px;
+}
+
+.forecast-container.small .icon {
+  font-size: 1.8rem;
+  margin-bottom: 4px;
+}
+
+.temp {
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: #ff6f61;
+  margin-bottom: 6px;
+}
+
+.forecast-container.small .temp {
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.rain {
+  font-size: 0.95rem;
+  color: #0066cc;
+  font-weight: 600;
+}
+
+.forecast-container.small .rain {
+  font-size: 0.75rem;
+}
+
+.rain.no-rain {
+  color: #999;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.powerflow-and-forecast-container {
+  display: flex;
+  flex-direction: column; /* stack children vertically */
+  align-items: center;    /* center horizontally, optional */
+  width: 100%;
+}

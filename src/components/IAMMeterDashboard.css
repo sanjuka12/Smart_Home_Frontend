@@ -16,7 +16,7 @@ body {
     background-color: #1e55ec;
     color: white;
     padding: 0.3px;
-    border-radius: 15px;
+    border-radius: 5px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: left; /* or flex-start */
@@ -82,7 +82,7 @@ body {
   .yield-section {
     background-color: white;
     padding: 20px;
-    border-radius: 15px;
+    border-radius: 5px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     width: auto;
     height: 93%;

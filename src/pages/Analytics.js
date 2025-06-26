@@ -32,35 +32,43 @@ export default function Analytics() {
 
   const [chartData, setChartData] = useState([]);
 
-  useEffect(() => {
-    axios.get('http://localhost:3000/api/inverter-data') // Update if hosted differently
-      .then(response => {
-        const todayMidnight = new Date();
-        todayMidnight.setHours(0, 0, 0, 0);
+ useEffect(() => {
+  axios.get('http://localhost:3000/solarinverterdata')
+    .then(response => {
+      const todayMidnight = new Date();
+      todayMidnight.setHours(0, 0, 0, 0);
 
-        const formatted = response.data
-          .filter(item => new Date(item.timestamp) >= todayMidnight)
-          .map(item => {
-            const date = new Date(item.timestamp);
+      const formatted = response.data
+        .filter(item => {
+          const ts = item.timestamp;
+          const date = ts && ts._seconds ? new Date(ts._seconds * 1000) : null;
+          return date && date >= todayMidnight;
+        })
+        .map(item => {
+          const ts = item.timestamp;
+          const date = new Date(ts._seconds * 1000);  // convert Firestore timestamp to JS Date
+          const minutes = date.getHours() * 60 + date.getMinutes();
 
-            // **NEW: convert time to minutes since midnight (numeric)**
-            const minutes = date.getHours() * 60 + date.getMinutes();
+          return {
+            time: minutes,
+            timeLabel: date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            inverter: Number(item.solarpower) || 0,
+            battery: 60 + Math.floor(Math.random() * 20), // Dummy battery %
+            load: 500 + Math.floor(Math.random() * 2000), // Dummy load
+            gridStatus: item.gridStatus,
+            voltage: item.voltage,
+            current: item.current,
+            frequency: item.frequency
+          };
+        });
+console.log("Final chartData:", formatted);
+      setChartData(formatted);
+    })
+    .catch(error => {
+      console.error('Error fetching inverter data:', error);
+    });
+}, []);
 
-            return {
-              time: minutes,  // numeric X axis
-              timeLabel: date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),  // optional label if needed
-              inverter: Number(item.power),
-              battery: 60 + Math.floor(Math.random() * 20),  // Dummy battery %
-              load: 500 + Math.floor(Math.random() * 2000),  // Dummy load W
-            };
-          });
-
-        setChartData(formatted);
-      })
-      .catch(error => {
-        console.error('Error fetching inverter data:', error);
-      });
-  }, []);
 
   // **NEW: get current time in minutes for X axis domain**
   const now = new Date();
@@ -85,7 +93,7 @@ const handleLogout = () => {
         <h1 className="dashboard-title">
           <img src="/assets/Dashboard.png" alt="Solar Icon" className="dashboard-icon" />
           <span style={{ marginLeft: '10px' }}>SUNWIZ</span>
-          <span style={{ marginLeft: '10px' }}>Solar Monitoring System</span>
+          <span style={{ marginLeft: '10px' }}>Solar Monitoring Portal</span>
         </h1>
 
         <div className="user-profile">
