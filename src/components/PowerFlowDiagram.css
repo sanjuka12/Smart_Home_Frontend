@@ -1,11 +1,12 @@
 .power-flow-container {
     position: relative;
-    width: 400px;
-    height: 400px;
+    width: 300px;
+    height: 300px;
     margin: 0;           /* Remove auto-centering */
 
     padding-top: -50px;    /* Adjust top spacing */
     padding-left: 100px
+    
   }
   
   .icon-wrapper {
@@ -13,29 +14,30 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
   }
   
   /* Place icons at rhombus corners */
   .solar {
-    top: 80%;
-    left: 13%;
+    top: 12%;
+    left: 5%;
     transform: translateY(-50%);
   }
   
   .home {
-    top: 80%;
-    right: 5%;
+    top: 12%;
+    right: 15%;
     transform: translateY(-50%);
   }
   
   .grid {
-    top: -10%;
-    left: 55%;
+    top: -35%;
+    left: 48%;
     transform: translateX(-50%);
   }
   
   .battery {
-    bottom: 40%;
-    left: 55%;
+    bottom: 45%;
+    left: 48%;
     transform: translateX(-50%);
   }

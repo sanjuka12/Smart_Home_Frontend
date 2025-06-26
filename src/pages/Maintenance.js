@@ -38,7 +38,7 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
             <h1 className="dashboard-title">
               <img src="/assets/Dashboard.png" alt="Solar Icon" className="dashboard-icon" />
               <span style={{ marginLeft: '10px' }}>SUNWIZ</span>
-              <span style={{ marginLeft: '10px' }}>Solar Monitoring System</span>
+              <span style={{ marginLeft: '10px' }}>Solar Monitoring Portal</span>
             </h1>
       
             <div className="user-profile">
