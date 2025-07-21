@@ -9,6 +9,7 @@ import EnergyAnalysis from './EnergyAnalysis';
 import { FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools, FaUsers, FaCog, FaQuestionCircle, FaUserCircle, FaBell, FaSignOutAlt} from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import WeatherForecast from "./weatherforecast";
+import Profile from "../pages/Profile";
 
 
 export default function IAMMeterDashboard() {
@@ -82,10 +83,11 @@ const handleLogout = () => {
 
         {dropdownOpen && (
            <div className="dropdown-menu" ref={dropdownRef}>
-<div className="dropdown-item">
-    <FaUserCircle className="dropdown-icon" />
-    Profile
-  </div>
+<div className="dropdown-item" onClick={() => navigate('/profile', {
+  state: { username, firstName }
+})}>
+  <FaUserCircle className="dropdown-icon" /> Profile
+</div>
   <div className="dropdown-item">
     <FaCog className="dropdown-icon" />
     Settings
