@@ -73,7 +73,11 @@ setSolarPower(Number(latest.solarpower) || 0);
 
           {dropdownOpen && (
             <div className="dropdown-menu">
-              <div className="dropdown-item"><FaUserCircle className="dropdown-icon" /> Profile</div>
+              <div className="dropdown-item" onClick={() => navigate('/profile', {
+                state: { username, firstName }
+              })}>
+                <FaUserCircle className="dropdown-icon" /> Profile
+              </div>
               <div className="dropdown-item"><FaCog className="dropdown-icon" /> Settings</div>
               <div className="dropdown-item" onClick={handleLogout}><FaSignOutAlt className="dropdown-icon" /> Logout</div>
             </div>

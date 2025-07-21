@@ -67,10 +67,11 @@ const navigate = useNavigate();
           
                   {dropdownOpen && (
                     <div className="dropdown-menu">
-          <div className="dropdown-item">
-              <FaUserCircle className="dropdown-icon" />
-              Profile
-            </div>
+ <div className="dropdown-item" onClick={() => navigate('/profile', {
+   state: { username, firstName }
+ })}>
+   <FaUserCircle className="dropdown-icon" /> Profile
+ </div>
             <div className="dropdown-item">
               <FaCog className="dropdown-icon" />
               Settings
