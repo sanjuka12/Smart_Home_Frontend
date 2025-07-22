@@ -97,7 +97,22 @@
   
   .role.viewer {
     color: #2ecc71;
-  }
+  }.user-table-wrapper {
+  max-height: 500px;         /* Adjust height as needed */
+  overflow-y: auto;          /* Enables vertical scrolling */
+  margin-top: 10px;
+  border-radius: 8px;
+}
+
+/* Optional: sticky header for better UX */
+.user-row.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+
+
   
 
 
