@@ -111,56 +111,60 @@ try {
 
   };
 
-
-
-
-
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <img src="/assets/Dashboard.png" alt="Solar Logo" className="login-logo" />
-        <h2 className="login-title">Solar Monitoring System</h2>
-        <form onSubmit={handleLogin}>
-          <input
-            type="text"
-            placeholder="Username"
-            className="login-input"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-
-          <div className="password-wrapper">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Password"
-              className="login-input"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              ref={passwordRef}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="show-password-btn"
-            >
-              {showPassword ? <FaEye /> : <FaEyeSlash />}
-            </button>
-          </div>
-
-          {error && (
-            <div className="error-message">
-              <FaTimesCircle className="error-icon" />
-              <span>{error}</span>
-            </div>
-          )}
-
-          <button type="submit" className="login-button">
-            Login
-          </button>
-        </form>
-      </div>
+   <div className="login-container">
+  <div className="login-wrapper">
+    
+    {/* ✅ Left Side Image */}
+    <div className="login-image-container">
+      <img src="/assets/login page pic.jpg" alt="Login Illustration" className="login-side-image" />
     </div>
+
+    {/* ✅ Right Side Login Box */}
+    <div className="login-box">
+      <img src="/assets/Dashboard.png" alt="Solar Logo" className="login-logo" />
+      <h2 className="login-title">Solar Monitoring System</h2>
+      <form onSubmit={handleLogin}>
+        <input
+          type="text"
+          placeholder="Username"
+          className="login-input"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <div className="password-wrapper">
+          <input
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Password"
+            className="login-input"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            ref={passwordRef}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="show-password-btn"
+          >
+            {showPassword ? <FaEye /> : <FaEyeSlash />}
+          </button>
+        </div>
+
+        {error && (
+          <div className="error-message">
+            <FaTimesCircle className="error-icon" />
+            <span>{error}</span>
+          </div>
+        )}
+
+        <button type="submit" className="login-button">
+          Login
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
   );
 }
