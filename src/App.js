@@ -10,6 +10,7 @@ import Users from './pages/Users';
 import Settings from './pages/Settings';
 import WeatherForecast from './components/weatherforecast';
 import Profile from './pages/Profile';
+import DeviceMap from './pages/DeviceMap';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
         <Route path="/Settings" element={<Settings />} />
        <Route path="/weatherforecast" element={<WeatherForecast />} />
        <Route path="/profile" element={<Profile />} />
+       <Route path="/DeviceMap" element={<DeviceMap />} />
         
 
       </Routes>
