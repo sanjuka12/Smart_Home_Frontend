@@ -6,6 +6,8 @@ import { NavLink } from 'react-router-dom';
 import { FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools, FaUsers, FaCog, FaQuestionCircle, FaUserCircle, FaBell, FaSignOutAlt, FaLocationArrow} from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
+
+
 export default function Settings() {
 
   const location = useLocation();
