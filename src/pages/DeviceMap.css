@@ -8,50 +8,6 @@
   margin-bottom: 25px;
 }
 
-/* Add inverter form */
-.add-inverter-form {
-  display: flex;
-  flex-direction: column;
-  max-width: 320px;
-  max-height: 320px;
-  background-color: #c7d2fe;
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  gap: 10px;
-  margin-bottom: 30px;
- 
-}
-
-.add-inverter-form h3 {
-  margin-bottom: 10px;
-  color: #1e3a8a;
-}
-
-.add-inverter-form input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-  background-color: #fff;
-}
-
-.add-inverter-form button {
-  width: 100px;
-  padding: 10px;
-  background-color: #034694;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-left: 100px;
-}
-
-.add-inverter-form button:hover {
-  background-color: #023262;
-}
-/* Style the buttons inside Leaflet popups */
 .leaflet-popup-content button {
   padding: 6px 12px;
   margin-top: 6px;
@@ -78,10 +34,47 @@
 
 /* Delete button */
 .leaflet-popup-content button:nth-of-type(2) {
-  background-color: #0077cc;
+  background-color: #aa0202;
   color: white;
 }
 
 .leaflet-popup-content button:nth-of-type(2):hover {
   background-color: #0077cc;
 }
+
+/* Container for Add Inverter button - centers button below title */
+.add-inverter-button-container {
+  display: flex;
+  justify-content: flex-end; /* Pushes button to the right */
+  align-items: center;
+  margin-bottom: 10px;
+  margin-top: 5px;
+ 
+}
+
+/* Add Inverter button styling */
+.add-inverter-button {
+  background-color: rgb(32, 92, 245);
+  color: #ffffff;
+  border: none;
+   margin-top: 20px;     /* Adjust as needed */
+   
+  border-radius: 1px;
+
+  width: 160px;
+  padding: 15px 15px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px; /* This creates space between children */
+  /* Remove white-space nowrap if exists */
+  white-space: normal !important;
+}
+.add-inverter-button:hover {
+  background-color: #023262;
+}
+
+

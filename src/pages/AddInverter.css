@@ -1,0 +1,32 @@
+.add-inverter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 1000px;
+  margin-top: 20px;
+  margin-left:20px ;
+}
+
+.add-inverter-form input,
+.add-inverter-form select {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.add-inverter-form button {
+  padding: 12px;
+  background-color: #007BFF;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  margin-left:400px ;
+}
+
+.add-inverter-form button:hover {
+  background-color: #0056b3;
+}
