@@ -11,6 +11,8 @@ import Settings from './pages/Settings';
 import WeatherForecast from './components/weatherforecast';
 import Profile from './pages/Profile';
 import DeviceMap from './pages/DeviceMap';
+import Available_Inverter from './pages/Available_Inverter';
+import AddInverter from './pages/AddInverter';
 
 
 function App() {
@@ -28,6 +30,9 @@ function App() {
        <Route path="/weatherforecast" element={<WeatherForecast />} />
        <Route path="/profile" element={<Profile />} />
        <Route path="/DeviceMap" element={<DeviceMap />} />
+       <Route path="/Available_Inverter" element={<Available_Inverter />} />
+       <Route path="/AddInverter" element={<AddInverter />} />
+       
         
 
       </Routes>
