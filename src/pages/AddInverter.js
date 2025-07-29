@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, NavLink } from 'react-router-dom';
-import './AddInverter.css';
+import axios from 'axios';
 import {
   FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools,
   FaUsers, FaCog, FaQuestionCircle, FaUserCircle,
   FaBell, FaSignOutAlt, FaLocationArrow
 } from 'react-icons/fa';
+import './AddInverter.css';
 
 export default function AddInverter() {
   const [inverterData, setInverterData] = useState({
     id: '',
     brand: '',
+    location: '',
     generationType: 'on-grid',
     lat: '',
     lng: '',
@@ -19,9 +21,8 @@ export default function AddInverter() {
   });
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const username = location.state?.username;
-  const firstName = location.state?.firstName;
+  const username = "";
+  const firstName = "";
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
@@ -33,24 +34,41 @@ export default function AddInverter() {
     });
   };
 
-  const handleAddInverter = (e) => {
+  const handleAddInverter = async (e) => {
     e.preventDefault();
-    const { id, brand, generationType, lat, lng, address, capacity } = inverterData;
-    if (!id || !brand || !lat || !lng || !address || !capacity) return;
+    const { id, brand, generationType, lat, lng, address, capacity, location } = inverterData;
 
-    const inverterList = JSON.parse(localStorage.getItem('inverterList')) || [];
-    inverterList.push({
-      id,
-      name: brand,
-      generationType,
-      lat: parseFloat(lat),
-      lng: parseFloat(lng),
-      address,
-      capacity
-    });
+    if (!id || !brand || !location || !lat || !lng || !address || !capacity) {
+      alert('Please fill all fields');
+      return;
+    }
 
-    localStorage.setItem('inverterList', JSON.stringify(inverterList));
-    navigate('/DeviceMap', { state: { username, firstName } });
+    try {
+      const postData = {
+        UnitId: id,
+        Name: brand,
+        Type: generationType,
+        Location: location,
+        Latitude: lat.toString(),
+        Longitude: lng.toString(),
+        Address: address,
+        InstalledCapacity: capacity,
+        Power: "Waiting",  // or set as needed
+        Status: "Waiting"
+      };
+
+      const response = await axios.post('http://localhost:3000/addinverter', postData);
+
+      if (response.status === 201 || response.status === 200) {
+        alert('✅ Inverter added successfully!');
+        navigate('/DeviceMap', { state: { username, firstName } });
+      } else {
+        alert('❌ Failed to add inverter.');
+      }
+    } catch (error) {
+      console.error('Add inverter error:', error);
+      alert('❌ Error adding inverter: ' + (error.response?.data?.message || error.message));
+    }
   };
 
   return (
@@ -125,7 +143,16 @@ export default function AddInverter() {
               >
                 <option value="on-grid">On-Grid</option>
                 <option value="off-grid">Off-Grid</option>
+                <option value="Hybrid">Hybrid</option>
               </select>
+              <input
+                type="text"
+                name="location"
+                placeholder="Location"
+                value={inverterData.location}
+                onChange={handleChange}
+                required
+              />
               <input
                 type="number"
                 step="any"

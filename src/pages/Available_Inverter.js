@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState,useEffect  } from "react";
 import "./Available_Inverter.css";
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { FaEdit, FaEye, FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools, FaUsers, FaCog, FaQuestionCircle, FaUserCircle, FaBell, FaSignOutAlt, FaTrashAlt, FaLocationArrow } from 'react-icons/fa';
+import axios from "axios";
 
 export default function Available_Inverter() {
   const location = useLocation();
@@ -14,16 +15,25 @@ export default function Available_Inverter() {
   };
 const navigate = useNavigate();
 
-  const [inverters, setInverters] = useState([
-    { unitID: "00101", name: "ABB", type: "SPsolar", location: "Galle", status: "Gen", generation: "3 kW" },
-    { unitID: "00102", name: "ABB", type: "Hybrid", location: "Matara", status: "Idle", generation: "2.5 kW" },
-    { unitID: "00103", name: "ABB", type: "String", location: "Kandy", status: "Gen", generation: "4.1 kW" },
-    { unitID: "00104", name: "ABB", type: "Micro", location: "Jaffna", status: "Fault", generation: "0 kW" },
-  ]);
+  const [inverters, setInverters] = useState([]);
 
   const handleAddInverter = () => {
     navigate('/AddInverter', { state: { username, firstName } });
   };
+
+useEffect(() => {
+  const fetchInverters = async () => {
+    try {
+      const res = await axios.get('http://localhost:3000/listInverters');
+      setInverters(res.data);
+    } catch (err) {
+      console.error('Error fetching inverter data:', err);
+    }
+  };
+  fetchInverters();
+}, []);
+
+
 
   return (
     <div className="dashboard-container">
@@ -103,12 +113,12 @@ const navigate = useNavigate();
                   <tbody>
                     {inverters.map((inv, idx) => (
                       <tr key={idx}>
-                        <td>{inv.unitID}</td>
-                        <td>{inv.name}</td>
-                        <td>{inv.type}</td>
-                        <td>{inv.location}</td>
-                        <td>{inv.status}</td>
-                        <td>{inv.generation}</td>
+                        <td>{inv.UnitId}</td>
+                        <td>{inv.Name}</td>
+                        <td>{inv.Type}</td>
+                        <td>{inv.Location}</td>
+                        <td>{inv.Status}</td>
+                        <td>{inv.Power}</td>
                         <td className="actions">
                           <FaEye title="View" />
                           <FaEdit title="Edit" />
