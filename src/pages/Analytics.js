@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools, FaUsers, FaCog, FaQuestionCircle, FaUserCircle, FaBell, FaSignOutAlt, FaChartLine, FaLocationArrow } from 'react-icons/fa';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import axios from "axios";
 import './Analytics.css';
-import { useNavigate } from 'react-router-dom';
+
 
 import {
   LineChart,
@@ -17,11 +17,14 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
+
+
+
 export default function Analytics() {
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const location = useLocation();
+  const navigate = useNavigate();
+const location = useLocation();
   const username = location.state?.username;
   const firstName = location.state?.firstName;
   
@@ -30,7 +33,13 @@ export default function Analytics() {
     setDropdownOpen(!dropdownOpen);
   };
 
-  const [chartData, setChartData] = useState([]);
+const [chartData, setChartData] = useState([]);
+
+  const handleAddChart = () => {
+    navigate('/Chart', { state: { username, firstName } });
+  };
+
+
 
  useEffect(() => {
   axios.get('http://localhost:3000/solarinverterdata')
@@ -81,7 +90,7 @@ console.log("Final chartData:", formatted);
     return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
   };
 
-const navigate = useNavigate();
+
 const handleLogout = () => {
   // clear tokens or session here if any
   navigate('/Loginpage');
@@ -156,7 +165,7 @@ const handleLogout = () => {
   <h2 className="section-title" style={{ margin: 0 }}>Analytics / Reports</h2>
 
   <button
-  onClick={() => console.log('Generate Chart clicked')}
+  onClick={handleAddChart}
   className="generate-chart-button"
 >
   <FaChartLine /> + Generate Chart
