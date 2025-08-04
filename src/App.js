@@ -13,6 +13,8 @@ import Profile from './pages/Profile';
 import DeviceMap from './pages/DeviceMap';
 import Available_Inverter from './pages/Available_Inverter';
 import AddInverter from './pages/AddInverter';
+import Chart from './pages/Chart';
+
 
 
 function App() {
@@ -32,6 +34,7 @@ function App() {
        <Route path="/DeviceMap" element={<DeviceMap />} />
        <Route path="/Available_Inverter" element={<Available_Inverter />} />
        <Route path="/AddInverter" element={<AddInverter />} />
+       <Route path="/Chart" element={<Chart/>} />
        
         
 
