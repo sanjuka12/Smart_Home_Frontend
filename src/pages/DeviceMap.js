@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, NavLink } from 'react-router-dom';
 import './DeviceMap.css';
+import axios from 'axios';
 
 import {
   FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools,
@@ -20,6 +21,9 @@ const inverterIcon = new L.Icon({
   popupAnchor: [0, -40],
 });
 
+
+
+
 export default function DeviceMap() {
   const location = useLocation();
   const username = location.state?.username;
@@ -29,29 +33,11 @@ export default function DeviceMap() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [inverters, setInverters] = useState([]);
 
-  useEffect(() => {
  
-      const defaultInverters = [
-        { id: 1, name: 'Inverter A', lat: 6.0486, lng: 80.5211 },
-        { id: 2, name: 'Inverter B', lat: 6.0320, lng: 80.2168 },
-      ];
-      setInverters(defaultInverters);
-      localStorage.setItem('inverterList', JSON.stringify(defaultInverters));
-    
-  }, []);
-
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
-  const handleMarkerClick = (inverter) => {
-    navigate('/devices', {
-      state: {
-        inverterId: inverter.id,
-        inverterName: inverter.name,
-        username,
-        firstName,
-      },
-    });
-  };
+
+
 
   const handleLogout = () => {
     navigate('/Loginpage');
@@ -66,6 +52,40 @@ export default function DeviceMap() {
     setInverters(updated);
     localStorage.setItem('inverterList', JSON.stringify(updated));
   };
+
+useEffect(() => {
+  const fetchInverters = async () => {
+    try {
+      const res = await axios.get('http://localhost:3000/listInverters');
+      
+      // Parse latitude and longitude to float
+      const formatted = res.data.map(inv => ({
+        ...inv,
+        lat: parseFloat(inv.Latitude),
+        lng: parseFloat(inv.Longitude),
+        name: inv.Name,
+       
+      }));
+
+      setInverters(formatted);
+    } catch (err) {
+      console.error('Error fetching inverter data:', err);
+    }
+  };
+
+  fetchInverters();
+}, []);
+
+const handleMarkerClick = (inv) => {
+  navigate('/devices', {
+    state: {
+      inverterId: inv.UnitId,   // pass UnitId here, not id
+      inverterName: inv.name,
+      username,
+      firstName,
+    },
+  });
+};
 
   return (
     <div className="dashboard-container">
@@ -141,17 +161,17 @@ export default function DeviceMap() {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
 
-              {inverters.map((inv) => (
-                <Marker key={inv.id} position={[inv.lat, inv.lng]} icon={inverterIcon}>
-                  <Popup>
-                    <div style={{ textAlign: 'center' }}>
-                      <strong>{inv.id}</strong><br />
-                      <button onClick={() => handleMarkerClick(inv)}>View</button><br />
-                      <button onClick={() => handleDeleteInverter(inv.id)}>Delete</button>
-                    </div>
-                  </Popup>
-                </Marker>
-              ))}
+ {inverters.map((inv) => (
+  <Marker key={inv.id} position={[inv.lat, inv.lng]} icon={inverterIcon}>
+    <Popup>
+      <div style={{ textAlign: 'center' }}>
+       <strong>{inv.UnitId}</strong><br />
+<button onClick={() => handleMarkerClick(inv)}>View</button><br />
+        <button onClick={() => handleDeleteInverter(inv.id)}>Delete</button>
+      </div>
+    </Popup>
+  </Marker>
+))}
             </MapContainer>
           </section>
         </main>

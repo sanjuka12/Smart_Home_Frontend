@@ -13,18 +13,26 @@ import {
 import 'react-circular-progressbar/dist/styles.css';
 import "./Devices.css";
 
+
+
 const Devices = () => {
   const location = useLocation();
   const username = location.state?.userName;
   const firstName = location.state?.firstName;
+  const inverterId = location.state?.inverterId;
+  const inverterName = location.state?.inverterName;
+
+  const [batteryPercentage, setBatteryPercentage] = useState(0); // or any initial value
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [solarData, setSolarData] = useState(null);
   const [solarpower, setSolarPower] = useState(0);
   const solarMax = 5000; // example max power
 
-  const [batteryPercentage, setBatteryPercentage] = useState(80); // dummy
-  const batteryMax = 100;
+  
+const batteryMax = 100;
+
+
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -35,26 +43,32 @@ const Devices = () => {
     navigate('/Loginpage');
   };
 
- useEffect(() => {
-    const fetchData = () => {
-      axios.get("http://localhost:3000/livedata")
-        .then(response => {
-          if (response.data.length > 0) {
-            const latest = response.data[0];
-setSolarData(latest);
-setSolarPower(Number(latest.solarpower) || 0);
+ const fetchInverterData = async () => {
+  try {
+    const res = await axios.get(`http://localhost:3000/livedata/${inverterId}`);
+    console.log('Fetched inverter live data:', res.data);
 
-          }
-        })
-        .catch(error => console.error("Fetch error:", error));
-    };
+    // Example assuming res.data structure matches these fields:
+    setSolarData({
+      gridStatus: res.data.gridStatus,
+      voltage: res.data.voltage,
+      current: res.data.current,
+      frequency: res.data.frequency,
+      solarpower:res.data.solarpower,
+    });
 
-    fetchData(); // initial load
+    setSolarPower(res.data.solarPower || 0);  // update solar power
 
-    const interval = setInterval(fetchData, 1000); // fetch every 1 second
+    setBatteryPercentage(res.data.batteryPercentage || 0); // update battery %
+  } catch (err) {
+    console.error('Failed to fetch data:', err);
+  }
+};
+useEffect(() => {
+   if (!inverterId) return;
+  fetchInverterData();
+}, [inverterId]);
 
-    return () => clearInterval(interval); // clean up on unmount
-  }, []);
 
   return (
     <div className="dashboard-container">
@@ -113,9 +127,9 @@ setSolarPower(Number(latest.solarpower) || 0);
                 <div className="gauge">
                   <div className="gauge-chart">
                     <CircularProgressbar
-                      value={solarpower}
+                      value={solarData?.solarpower}
                       maxValue={solarMax}
-                      text={`${solarpower.toFixed(2)} kW`}
+                      text={`${solarData?.solarpower.toFixed(0)} kW`}
                       styles={buildStyles({
                         textSize: 16,
                         pathColor: "#6006B6",
