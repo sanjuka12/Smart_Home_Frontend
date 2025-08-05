@@ -13,7 +13,30 @@ import {
 import 'react-circular-progressbar/dist/styles.css';
 import "./Devices.css";
 
+const socket = new WebSocket("ws://192.168.43.234:3000");
 
+const mapGridStatus = (statusCode) => {
+  const statusMap = {
+    1: "OFF",
+    2: "Sleep",
+    3: "Starting",
+    4: "Generating",
+    5: "Throttled",
+    6: "Shutting Down",
+    7: "Fault",
+    8: "Standby"
+  };
+  return statusMap[statusCode] || "Unknown";
+};
+
+const mapBatteryStatus = (statusCode) => {
+  const statusMap = {
+    0: "Idle",
+    1: "Charging",
+     1: "Discharging"   
+  };
+  return statusMap[statusCode] || "Unknown";
+};
 
 const Devices = () => {
   const location = useLocation();
@@ -25,13 +48,17 @@ const Devices = () => {
   const [batteryPercentage, setBatteryPercentage] = useState(0); // or any initial value
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
   const [solarData, setSolarData] = useState(null);
-  const [solarpower, setSolarPower] = useState(0);
+  const [batteryData, setBatteryData] = useState(null);
   const solarMax = 5000; // example max power
+  const batteryMax = 100;
 
-  
-const batteryMax = 100;
 
+socket.onmessage = (event) => {
+  const liveData = JSON.parse(event.data);
+  // Update UI with liveData
+};
 
 
   const toggleDropdown = () => {
@@ -50,25 +77,54 @@ const batteryMax = 100;
 
     // Example assuming res.data structure matches these fields:
     setSolarData({
-      gridStatus: res.data.gridStatus,
+      gridStatus: mapGridStatus(res.data.gridStatus),
       voltage: res.data.voltage,
       current: res.data.current,
       frequency: res.data.frequency,
       solarpower:res.data.solarpower,
     });
 
-    setSolarPower(res.data.solarPower || 0);  // update solar power
+
+
 
     setBatteryPercentage(res.data.batteryPercentage || 0); // update battery %
   } catch (err) {
     console.error('Failed to fetch data:', err);
   }
 };
-useEffect(() => {
-   if (!inverterId) return;
-  fetchInverterData();
-}, [inverterId]);
 
+
+const fetchBatteryData = async () => {
+  try {
+    const res = await axios.get(`http://localhost:3000/realtimebatterydata/${inverterId}`);
+    console.log('Fetched battery live data:', res.data);
+
+    setBatteryData({
+      gridStatus: mapBatteryStatus(res.data.gridStatus),
+      voltage: res.data.voltage,
+      current: res.data.current,
+      power: res.data.power,
+      soc: res.data.soc,
+      timestamp: res.data.timestamp,
+    });
+  } catch (error) {
+    console.error('Error fetching battery live data:', error);
+  }
+};
+
+useEffect(() => {
+  if (!inverterId) return;
+
+  fetchInverterData();
+  fetchBatteryData();
+
+  const intervalId = setInterval(() => {
+    fetchInverterData();
+    fetchBatteryData();
+  }, 1000); // every second
+
+  return () => clearInterval(intervalId);
+}, [inverterId]);
 
   return (
     <div className="dashboard-container">
@@ -129,7 +185,7 @@ useEffect(() => {
                     <CircularProgressbar
                       value={solarData?.solarpower}
                       maxValue={solarMax}
-                      text={`${solarData?.solarpower.toFixed(0)} kW`}
+                      text={`${solarData?.solarpower.toFixed(0)} W`}
                       styles={buildStyles({
                         textSize: 16,
                         pathColor: "#6006B6",
@@ -169,9 +225,9 @@ useEffect(() => {
                 <div className="gauge">
                   <div className="gauge-chart">
                     <CircularProgressbar
-                      value={batteryPercentage}
+                      value={batteryData?.soc || 0}
                       maxValue={batteryMax}
-                      text={`${batteryPercentage.toFixed(2)} %`}
+                      text={`${batteryData?.soc?.toFixed(0) || 0} %`}
                       styles={buildStyles({
                         textSize: 16,
                         pathColor: "#9203AB",
@@ -183,10 +239,24 @@ useEffect(() => {
                   <p className="gauge-label">Battery Percentage</p>
                 </div>
 
-                <div className="info-row"><span>Status</span><span className="badge" style={{ color: 'green', fontWeight: 'bold' }}>Charging</span></div>
-                <div className="info-row"><span>Battery Voltage</span><span>54 V</span></div>
-                <div className="info-row"><span>Charging Current</span><span>0.1 A</span></div>
-                <div className="info-row"><span>Battery Power</span><span>30 W</span></div>
+                <div className="info-row">
+    <span>Status</span>
+    <span className="badge" style={{ color: 'green', fontWeight: 'bold' }}>
+      {batteryData?.gridStatus || "N/A"}
+    </span>
+  </div>
+  <div className="info-row">
+    <span>Battery Voltage</span>
+    <span>{batteryData?.voltage ? `${batteryData.voltage} V` : "N/A"}</span>
+  </div>
+  <div className="info-row">
+    <span>Charging Current</span>
+    <span>{batteryData?.current ? `${batteryData.current} A` : "N/A"}</span>
+  </div>
+  <div className="info-row">
+    <span>Battery Power</span>
+    <span>{batteryData?.power ? `${batteryData.power} W` : "N/A"}</span>
+  </div>
               </div>
             </div>
           </section>
