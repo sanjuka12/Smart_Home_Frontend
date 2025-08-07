@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'; // For routing
 import './index.css'; // Global styles
 import App from './App'; // Main app component
 import reportWebVitals from './reportWebVitals'; // Optional performance metrics
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

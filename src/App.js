@@ -15,6 +15,8 @@ import Available_Inverter from './pages/Available_Inverter';
 import AddInverter from './pages/AddInverter';
 import Chart from './pages/Chart';
 
+import { SpeedInsights } from "@vercel/speed-insights/react"
+
 
 
 function App() {
