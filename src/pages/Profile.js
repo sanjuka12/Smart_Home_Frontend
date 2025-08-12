@@ -5,9 +5,11 @@ import {
   buildStyles
 } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; 
+
 
 
 import { FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools, FaUsers, FaCog, FaQuestionCircle, FaUserCircle, FaBell, FaSignOutAlt, FaEdit, FaCheck, FaEye, FaEyeSlash, FaLocationArrow } from 'react-icons/fa';
@@ -22,18 +24,34 @@ export default function Profile() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
-  const solarPower = 1.2;
-  const solarMax = 3;
-  const batterypercentage = 85;
-  const batteryMax = 100;
-const [profileData, setProfileData] = useState({
-    name: 'John Doe',
-    email: 'john@example.com',
-    role: 'Admin',
-    password: '********',
-    address: 'No.23/A, Temple Street',
-    profilePic: ''
-  });
+  const [profileData, setProfileData] = useState({
+  name: '',
+  email: '',
+  role: '',
+  password: '',
+  invAccess: '',
+});
+
+useEffect(() => {
+  if (username) {
+    axios
+      .get(`http://localhost:3000/users/${encodeURIComponent(username)}`)
+      .then(res => {
+        const data = res.data;
+        setProfileData({
+          name: data.firstName || '',
+          email: data.userName || '',
+          role: data.role || '',
+          password: data.password || '',
+          invAccess:data.inverterAccess|| '',
+        });
+      })
+      .catch(err => {
+        console.error('Error fetching user data:', err);
+      });
+  }
+}, [username]);
+
 
   const handleLogout = () => {
   // clear tokens or session here if any
@@ -110,7 +128,7 @@ const togglePicOptions = () => setPicOptionsOpen(!picOptionsOpen);
         <aside className="dashboard-sidebar">
           <h2 className="sidebar-title">All Places</h2>
           <nav className="sidebar-nav">
-            <NavLink to="/dashboard" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaTachometerAlt className="sidebar-icon" /> Dashboard</NavLink>
+             <NavLink to="/dashboard" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaTachometerAlt className="sidebar-icon" /> Dashboard</NavLink>
               <NavLink to="/analytics1" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaChartBar className="sidebar-icon" /> Analytics / Reports</NavLink>
               <NavLink to="/DeviceMap" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaLocationArrow className="sidebar-icon" /> Inverter Map</NavLink>
               <NavLink to="/Available_Inverter" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaSolarPanel className="sidebar-icon" /> Devices / Inverters</NavLink>
@@ -158,7 +176,7 @@ const togglePicOptions = () => setPicOptionsOpen(!picOptionsOpen);
 </div>
 
 
-              {['name', 'email', 'role', 'password', 'address'].map(field => (
+              {['name', 'email', 'role', 'password', 'invAccess'].map(field => (
                 <div className="profile-row" key={field}>
                   <label>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
                   {editingField === field ? (

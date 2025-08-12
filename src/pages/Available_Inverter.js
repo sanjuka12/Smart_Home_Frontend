@@ -21,6 +21,10 @@ const navigate = useNavigate();
     navigate('/AddInverter', { state: { username, firstName } });
   };
 
+    const handleDataLog = () => {
+    navigate('/DataLog', { state: { username, firstName } });
+  };
+
 useEffect(() => {
   const fetchInverters = async () => {
     try {
@@ -92,9 +96,21 @@ useEffect(() => {
             <h2 className="section-title">Inverter List</h2>
 
             {/* Add Button */}
-            <div className="add-inverter-container">
-              <button className="add-inverter-button" onClick={handleAddInverter}><span className="plus-sign">+</span>Add Inverter</button>
-            </div>
+          <div className="add-inverter-container">
+
+          <button className="secondary-button" onClick={handleAddInverter}>
+            Search
+            </button>
+
+           <button className="console-button " onClick={handleDataLog}>
+            Data Logs
+            </button>
+
+      <button className="add-inverter-button" onClick={handleAddInverter}>
+         <span className="plus-sign">+</span>Add Inverter
+          </button>
+      </div>
+
 
             <div className="inverter-page">
               <div className="list-card">
