@@ -14,6 +14,8 @@ import DeviceMap from './pages/DeviceMap';
 import Available_Inverter from './pages/Available_Inverter';
 import AddInverter from './pages/AddInverter';
 import Chart from './pages/Chart';
+import Support from './pages/Support';
+import DataLog from './pages/DataLog';
 
 import { SpeedInsights } from "@vercel/speed-insights/react"
 
@@ -37,6 +39,8 @@ function App() {
        <Route path="/Available_Inverter" element={<Available_Inverter />} />
        <Route path="/AddInverter" element={<AddInverter />} />
        <Route path="/Chart" element={<Chart/>} />
+       <Route path="/support" element={<Support />} />
+       <Route path="/DataLog" element={<DataLog />} />
        
         
 

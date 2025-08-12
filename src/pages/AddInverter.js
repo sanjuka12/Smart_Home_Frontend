@@ -1,31 +1,51 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation, NavLink } from 'react-router-dom';
 import axios from 'axios';
+import './AddInverter.css';
 import {
   FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools,
   FaUsers, FaCog, FaQuestionCircle, FaUserCircle,
   FaBell, FaSignOutAlt, FaLocationArrow
 } from 'react-icons/fa';
-import './AddInverter.css';
 
 export default function AddInverter() {
+  const locationHook = useLocation();
+  const navigate = useNavigate();
+
+  const username = locationHook.state?.username || '';
+  const firstName = locationHook.state?.firstName || '';
+  const locationData = locationHook.state?.selectedLocation;
+  const previousData = locationHook.state?.newInverterData;
+
   const [inverterData, setInverterData] = useState({
     id: '',
     brand: '',
-    location: '',
     generationType: 'on-grid',
-    lat: '',
-    lng: '',
-    address: '',
-    capacity: ''
+    capacity: '',
+    location: '',
+    latitude: '',
+    longitude: '',
+    address: ''
   });
 
-  const navigate = useNavigate();
-  const username = "";
-  const firstName = "";
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+
+  useEffect(() => {
+    // Load previous form data if coming back from map
+    if (previousData) {
+      setInverterData(prev => ({ ...prev, ...previousData }));
+    }
+    // Auto fill lat, lng, and closest city if returned from map
+    if (locationData) {
+      setInverterData(prev => ({
+        ...prev,
+        latitude: locationData.lat,
+        longitude: locationData.lng,
+        location: locationData.city,
+      }));
+    }
+  }, [locationData, previousData]);
 
   const handleChange = (e) => {
     setInverterData({
@@ -34,32 +54,56 @@ export default function AddInverter() {
     });
   };
 
-  const handleAddInverter = async (e) => {
-    e.preventDefault();
-    const { id, brand, generationType, lat, lng, address, capacity, location } = inverterData;
+const handleRedirectToMap = () => {
+  if (!inverterData.id.trim() || !inverterData.brand.trim() || !inverterData.capacity.trim()) {
+    alert("Please fill Inverter ID, Brand, and Capacity before selecting a location.");
+    return;
+  }
+  navigate('/DeviceMap', {
+    state: { username, firstName, newInverterData: inverterData }
+  });
+};
 
-    if (!id || !brand || !location || !lat || !lng || !address || !capacity) {
-      alert('Please fill all fields');
+
+  const handleSaveInverter = async () => {
+    // Validation
+    const requiredFields = ['id', 'brand', 'capacity', 'address'];
+    for (const field of requiredFields) {
+      if (!inverterData[field] || inverterData[field].trim() === '') {
+        alert(`Please complete the "${field}" field.`);
+        return;
+      }
+    }
+
+    if (!inverterData.latitude || !inverterData.longitude) {
+      alert('Please select a location on the map to set latitude and longitude.');
+      return;
+    }
+
+    const latNum = parseFloat(inverterData.latitude);
+    const lngNum = parseFloat(inverterData.longitude);
+    if (isNaN(latNum) || isNaN(lngNum)) {
+      alert('Latitude and Longitude must be valid numbers.');
       return;
     }
 
     try {
       const postData = {
-        UnitId: id,
-        Name: brand,
-        Type: generationType,
-        Location: location,
-        Latitude: lat.toString(),
-        Longitude: lng.toString(),
-        Address: address,
-        InstalledCapacity: capacity,
-        Power: "Waiting",  // or set as needed
+        UnitId: inverterData.id.trim(),
+        Name: inverterData.brand.trim(),
+        Type: inverterData.generationType,
+        Location: inverterData.location,
+        Latitude: latNum.toString(),
+        Longitude: lngNum.toString(),
+        Address: inverterData.address.trim(),
+        InstalledCapacity: inverterData.capacity.trim(),
+        Power: "Waiting",
         Status: "Waiting"
       };
 
       const response = await axios.post('http://localhost:3000/addinverter', postData);
 
-      if (response.status === 201 || response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
         alert('✅ Inverter added successfully!');
         navigate('/DeviceMap', { state: { username, firstName } });
       } else {
@@ -85,109 +129,61 @@ export default function AddInverter() {
           <span className="user-name">{firstName}</span>
           <FaUserCircle className="profile-icon" />
           <span className="dropdown-arrow" onClick={toggleDropdown}>▼</span>
-
           {dropdownOpen && (
             <div className="dropdown-menu">
-              <div className="dropdown-item"><FaUserCircle className="dropdown-icon" /> Profile</div>
-              <div className="dropdown-item"><FaCog className="dropdown-icon" /> Settings</div>
-              <div className="dropdown-item"><FaSignOutAlt className="dropdown-icon" /> Logout</div>
+              <div className="dropdown-item"><FaUserCircle /> Profile</div>
+              <div className="dropdown-item"><FaCog /> Settings</div>
+              <div className="dropdown-item"><FaSignOutAlt /> Logout</div>
             </div>
           )}
         </div>
       </header>
 
-      {/* Content */}
       <div className="dashboard-content">
         {/* Sidebar */}
         <aside className="dashboard-sidebar">
           <h2 className="sidebar-title">All Places</h2>
           <nav className="sidebar-nav">
-            <NavLink to="/dashboard" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaTachometerAlt className="sidebar-icon" /> Dashboard</NavLink>
-            <NavLink to="/analytics1" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaChartBar className="sidebar-icon" /> Analytics / Reports</NavLink>
-            <NavLink to="/DeviceMap" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaLocationArrow className="sidebar-icon" /> Inverter Map</NavLink>
-            <NavLink to="/Available_Inverter" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaSolarPanel className="sidebar-icon" /> Devices / Inverters</NavLink>
-            <NavLink to="/Maintenance" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaTools className="sidebar-icon" /> Maintenance / Alerts</NavLink>
-            <NavLink to="/Users" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaUsers className="sidebar-icon" /> Users / Roles</NavLink>
-            <NavLink to="/Settings" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaCog className="sidebar-icon" /> Settings</NavLink>
-            <NavLink to="/support" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaQuestionCircle className="sidebar-icon" /> Support / Help</NavLink>
+<NavLink to="/dashboard" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaTachometerAlt className="sidebar-icon" /> Dashboard</NavLink>
+  <NavLink to="/analytics1" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaChartBar className="sidebar-icon" /> Analytics / Reports</NavLink>
+  <NavLink to="/DeviceMap" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaLocationArrow className="sidebar-icon" /> Inverter Map</NavLink>
+  <NavLink to="/Available_Inverter" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaSolarPanel className="sidebar-icon" /> Devices / Inverters</NavLink>
+  <NavLink to="/Maintenance" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaTools className="sidebar-icon" /> Maintenance / Alerts</NavLink>
+  <NavLink to="/Users" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaUsers className="sidebar-icon" /> Users / Roles</NavLink>
+  <NavLink to="/Settings" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaCog className="sidebar-icon" /> Settings</NavLink>
+  <NavLink to="/support" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaQuestionCircle className="sidebar-icon" /> Support / Help</NavLink>
           </nav>
         </aside>
 
         {/* Main */}
         <main className="dashboard-main">
-          <section className="yield-section">
+          <section className="yield-section add-inverter-section">
             <h2 className="section-title">Add New Inverter</h2>
+            <form className="add-inverter-form" onSubmit={e => e.preventDefault()}>
+              <input type="text" name="id" placeholder="Inverter ID" value={inverterData.id} onChange={handleChange} required />
+              <input type="text" name="brand" placeholder="Inverter Brand" value={inverterData.brand} onChange={handleChange} required />
 
-            <form className="add-inverter-form" onSubmit={handleAddInverter}>
-              <input
-                type="text"
-                name="id"
-                placeholder="Inverter ID"
-                value={inverterData.id}
-                onChange={handleChange}
-                required
-              />
-              <input
-                type="text"
-                name="brand"
-                placeholder="Inverter Brand"
-                value={inverterData.brand}
-                onChange={handleChange}
-                required
-              />
-              <select
-                name="generationType"
-                value={inverterData.generationType}
-                onChange={handleChange}
-                required
-              >
+              <select name="generationType" value={inverterData.generationType} onChange={handleChange} required>
                 <option value="on-grid">On-Grid</option>
                 <option value="off-grid">Off-Grid</option>
                 <option value="Hybrid">Hybrid</option>
               </select>
-              <input
-                type="text"
-                name="location"
-                placeholder="Location"
-                value={inverterData.location}
-                onChange={handleChange}
-                required
-              />
-              <input
-                type="number"
-                step="any"
-                name="lat"
-                placeholder="Latitude"
-                value={inverterData.lat}
-                onChange={handleChange}
-                required
-              />
-              <input
-                type="number"
-                step="any"
-                name="lng"
-                placeholder="Longitude"
-                value={inverterData.lng}
-                onChange={handleChange}
-                required
-              />
-              <input
-                type="text"
-                name="address"
-                placeholder="Address"
-                value={inverterData.address}
-                onChange={handleChange}
-                required
-              />
-              <input
-                type="text"
-                name="capacity"
-                placeholder="Installed Capacity (kW)"
-                value={inverterData.capacity}
-                onChange={handleChange}
-                required
-              />
-              <button type="submit">Add Inverter</button>
+
+              <input type="text" name="capacity" placeholder="Generation Capacity (kW)" value={inverterData.capacity} onChange={handleChange} required />
+
+              <div className="location-row">
+                <input type="text" name="location" placeholder="Closest City" value={inverterData.location} readOnly />
+                <button type="button" className="map-button" onClick={handleRedirectToMap}>Select on Map</button>
+              </div>
+
+              <input type="text" name="latitude" placeholder="Latitude" value={inverterData.latitude} readOnly />
+              <input type="text" name="longitude" placeholder="Longitude" value={inverterData.longitude} readOnly />
+
+              <input type="text" name="address" placeholder="Address (Required)" className="full-width" value={inverterData.address} onChange={handleChange} required />
+
+              <button type="button" className="save-button" onClick={handleSaveInverter}>
+                Add Inverter
+              </button>
             </form>
           </section>
         </main>

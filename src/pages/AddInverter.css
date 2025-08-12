@@ -1,32 +1,92 @@
+/* Add Inverter Form Grid Layout */
 .add-inverter-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-width: 1000px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 15px;
+  max-width: 90%;
   margin-top: 20px;
-  margin-left:20px ;
+  margin-left: 20px;
 }
 
+/* All inputs and selects */
 .add-inverter-form input,
 .add-inverter-form select {
-  padding: 10px;
-  font-size: 16px;
+  padding: 12px 15px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #007ed2;
+  font-size: 14px;
+  outline: none;
+  background-color: white;
+  width: 95%;
 }
 
-.add-inverter-form button {
-  padding: 12px;
-  background-color: #007BFF;
+.add-inverter-form input:focus,
+.add-inverter-form select:focus {
+  border-color: #1e3d59;
+  box-shadow: 0 0 4px rgba(30, 61, 89, 0.3);
+}
+
+.location-row {
+  grid-column: 1 / span 2; /* span full width of the form's two columns */
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+  width: 40%;
+}
+.location-row input {
+  width: 50%;
+}
+
+
+
+/* Map Button */
+.map-button {
+  background: #1e3d59;
   color: white;
-  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  
+  justify-content: center;
+  white-space: nowrap;
+  width: 150px;
+  height: 40px;
+  margin: auto;
+}
+
+.map-button:hover {
+  background: #163045;
+}
+
+/* Address Field Full Width */
+.full-width {
+  grid-column: 1 / span 2;
+}
+
+/* Save Button Full Width Center */
+.save-button {
+  grid-column: 1 / span 2;
+  margin-top: 12px;
+  background: #007BFF;
+  color: white;
+  padding: 12px;
+  font-size: 16px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  font-weight: bold;
   transition: 0.3s ease;
-  margin-left:400px ;
+  justify-self: center;
+  width: 200px;
+  
 }
 
-.add-inverter-form button:hover {
+.save-button:hover {
   background-color: #0056b3;
 }
