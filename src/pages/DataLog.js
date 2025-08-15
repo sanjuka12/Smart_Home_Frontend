@@ -22,55 +22,74 @@ export default function DataLog() {
     setDropdownOpen(!dropdownOpen);
   };
     
-  const handleView = () => {
-    /*if (!selectedInverter || !selectedDuration) {
-      alert("Please select both inverter and time duration");
-      return;
-    }*/
-    if (!selectedInverter) {
-        setErrorMessage("⚠️ Please select an inverter.");
-        return;
+const handleView = async () => {
+  if (!selectedInverter) {
+    setErrorMessage("⚠️ Please select an inverter.");
+    return;
+  }
+
+  if (!selectedDuration) {
+    setErrorMessage("⚠️ Please select a time duration.");
+    return;
+  }
+
+  setErrorMessage("");
+
+  try {
+    const response = await fetch('http://localhost:3000/solarinverterdata');
+    if (!response.ok) throw new Error("Failed to fetch inverter data");
+    const allData = await response.json();
+
+    // Filter by selected inverter
+    const inverterData = allData.filter(item => item.UnitId === selectedInverter);
+
+    // Calculate start time based on selected duration
+    const now = new Date();
+    let startTime = new Date();
+
+    switch (selectedDuration) {
+      case '30min':
+        startTime.setMinutes(now.getMinutes() - 30);
+        break;
+      case '1h':
+        startTime.setHours(now.getHours() - 1);
+        break;
+      case '6h':
+        startTime.setHours(now.getHours() - 6);
+        break;
+      case '12h':
+        startTime.setHours(now.getHours() - 12);
+        break;
+      case '24h':
+        startTime.setHours(now.getHours() - 24);
+        break;
+      case 'week':
+        startTime.setDate(now.getDate() - 7);
+        break;
+      case 'month':
+        startTime.setMonth(now.getMonth() - 1);
+        break;
+      default:
+        startTime = new Date(0); // fallback: include all
     }
 
-    if (!selectedDuration) {
-        setErrorMessage("⚠️ Please select a time duration.");
-        return;
-    } 
+    // Filter by duration
+    const filteredData = inverterData.filter(item => new Date(item.timestamp) >= startTime);
 
-    setErrorMessage("");
+    // Sort newest first
+    const sortedData = filteredData.sort(
+      (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+    );
 
-    /*fetch(`/api/solar-data?inverter=${selectedInverter}&duration=${selectedDuration}`)
-        .then(res => res.json())
-        .then(data => {
-          // Sort so newest first
-          const sortedSolar = [...data].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-          setSolarData(sortedSolar);
-        });
+    setSolarData(sortedData); // set for solar inverter table
+    // If you also have battery data in the same endpoint, do similar filtering for battery
+    setBatteryData(sortedData); // or replace with actual battery data
 
-      fetch(`/api/battery-data?inverter=${selectedInverter}&duration=${selectedDuration}`)
-        .then(res => res.json())
-        .then(data => {
-          const sortedBattery = [...data].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-          setBatteryData(sortedBattery);
-        });*/
-
-    // Dummy Solar Data
-    const dummySolar = [
-      { timestamp: "2025-08-10 14:20:10", voltage: 230, current: 5.2, power: 1196, frequency: 50, status: "Active" },
-      { timestamp: "2025-08-10 14:10:10", voltage: 229, current: 5.1, power: 1167, frequency: 50, status: "Active" },
-      { timestamp: "2025-08-10 14:00:10", voltage: 228, current: 5.0, power: 1140, frequency: 50, status: "Active" },
-    ];
-
-    // Dummy Battery Data
-    const dummyBattery = [
-      { timestamp: "2025-08-10 14:20:10", voltage: 48.5, current: 3.8, power: 184, stateOfCharge: 78, status: "Charging" },
-      { timestamp: "2025-08-10 14:10:10", voltage: 48.3, current: 3.6, power: 173, stateOfCharge: 77, status: "Charging" },
-      { timestamp: "2025-08-10 14:00:10", voltage: 48.1, current: 3.5, power: 169, stateOfCharge: 76, status: "Charging" },
-    ];
-
-    setSolarData(dummySolar);
-    setBatteryData(dummyBattery);
-  };
+  } catch (error) {
+    console.error('Error fetching inverter data:', error);
+    setErrorMessage("⚠️ Error fetching data. Please try again.");
+  }
+};
 
   return (
     <div className="dashboard-container">
@@ -131,7 +150,7 @@ export default function DataLog() {
               <label htmlFor="inverterSelect">Select Inverter:</label>
               <select id="inverterSelect" className="filter-select" value={selectedInverter} onChange={(e) => setSelectedInverter(e.target.value)}>
                 <option value="">-- Select Inverter --</option>
-                <option value="inverter1">Inverter 1</option>
+                <option value="inverter1">INV001</option>
                 <option value="inverter2">Inverter 2</option>
                 <option value="inverter3">Inverter 3</option>
               </select>
