@@ -16,8 +16,9 @@
   border: 1px solid #007ed2;
   font-size: 14px;
   outline: none;
-  background-color: white;
+  background-color: rgb(255, 255, 255);
   width: 95%;
+  color: black;
 }
 
 .add-inverter-form input:focus,

@@ -33,7 +33,7 @@ const mapBatteryStatus = (statusCode) => {
   const statusMap = {
     0: "Idle",
     1: "Charging",
-     1: "Discharging"   
+     2: "Discharging"   
   };
   return statusMap[statusCode] || "Unknown";
 };

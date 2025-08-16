@@ -48,8 +48,16 @@
 
 .table-section {
   flex: 1;
-  min-width: 400px;
+  min-width: 150px;
+
+  /* Add scroll for each table separately */
+  max-height: 400px;   /* adjust as needed */
+  overflow-y: auto;
+  overflow-x: auto;
+
+  border: 1px solid #ccc;  /* optional: to show boundary */
 }
+
 
 .data-table {
   width: 100%;

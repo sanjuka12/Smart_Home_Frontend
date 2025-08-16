@@ -42,7 +42,7 @@ function LocationSelector({ onSelect }) {
 
 export default function DeviceMap() {
   const location = useLocation();
-  const username = location.state?.username;
+  const username = location.state?.useName;
   const firstName = location.state?.firstName;
   const navigate = useNavigate();
 
@@ -200,8 +200,8 @@ export default function DeviceMap() {
             </div>
 
             <MapContainer
-              center={[6.0535, 80.2200]}
-              zoom={12}
+              center={[6.0383, 80.3909]}
+              zoom={11}
               minZoom={6}
               maxBounds={[[5.85, 79.6], [9.85, 82.1]]}
               maxBoundsViscosity={1.0}

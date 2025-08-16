@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function LoginPage() {
-  const [username, setUsername] = useState('');
+  const [userName, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const firstName= useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -31,7 +31,7 @@ export default function LoginPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userName: username,
+          userName: userName,
           password: password,
           firstName:firstName,
         }),
@@ -42,7 +42,7 @@ export default function LoginPage() {
       if (response.ok) {
         // ✅ Login successful
         console.log("Login success:", data);
-        navigate('/dashboard', { state: { username,firstName: data.firstName } });
+        navigate('/dashboard', { state: { userName,firstName: data.firstName } });
       } else {
         // ❌ Login failed
         if (response.status === 404) {
@@ -67,7 +67,7 @@ try {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        userName: username,
+        userName: userName,
         password: password,
       }),
     });
@@ -90,7 +90,7 @@ try {
       });
 
       // ✅ Navigate to dashboard with username and firstName
-      navigate('/dashboard', { state: { username, firstName: data.firstName } });
+      navigate('/dashboard', { state: { userName, firstName: data.firstName } });
 
     } else {
       if (response.status === 404) {
@@ -129,7 +129,7 @@ try {
           type="text"
           placeholder="Username"
           className="login-input"
-          value={username}
+          value={userName}
           onChange={(e) => setUsername(e.target.value)}
           required
         />

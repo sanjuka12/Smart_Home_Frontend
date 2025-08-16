@@ -10,7 +10,7 @@ export default function Users() {
 
 
   const location = useLocation();
-  const username = location.state?.username;
+  const username = location.state?.userName;
   const firstName = location.state?.firstName;
 
 const [filterDate, setFilterDate] = useState('');
@@ -155,7 +155,6 @@ const handleLogout = () => {
     <div className="user-row header">
       <div>Date</div>
       <div>Log In</div>
-      <div>Log Out</div>
       <div>Username</div>
       <div>Role</div>
     </div>
@@ -163,7 +162,6 @@ const handleLogout = () => {
       <div className="user-row" key={index}>
         <div>{user.date}</div>
         <div>{user.login}</div>
-        <div>{user.logout}</div>
         <div>{user.userName}</div>
         <div className={`role ${user.role.toLowerCase()}`}>{user.role}</div>
       </div>
