@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 export default function Settings() {
 
   const location = useLocation();
-  const username = location.state?.username;
+  const username = location.state?.userName;
   const firstName = location.state?.firstName;
   
   

@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import './Support.css';
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools,
   FaUsers, FaCog, FaQuestionCircle, FaUserCircle,
@@ -10,15 +10,20 @@ import {
 
 export default function Support() {
   const location = useLocation();
-  const username = location.state?.username;
+  const username = location.state?.userName;
   const firstName = location.state?.firstName;
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
-
+const handleLogout = () => {
+  // clear tokens or session here if any
+  navigate('/Loginpage');
+};
   return (
     <div className="dashboard-container">
       {/* Header */}
@@ -34,21 +39,22 @@ export default function Support() {
           <FaUserCircle className="profile-icon" />
           <span className="dropdown-arrow" onClick={toggleDropdown}>▼</span>
           {dropdownOpen && (
-            <div className="dropdown-menu">
-              <div className="dropdown-item">
-                <FaUserCircle className="dropdown-icon" />
-                Profile
-              </div>
-              <div className="dropdown-item">
-                <FaCog className="dropdown-icon" />
-                Settings
-              </div>
-              <div className="dropdown-item">
-                <FaSignOutAlt className="dropdown-icon" />
-                Logout
-              </div>
-            </div>
-          )}
+                              <div className="dropdown-menu" ref={dropdownRef}>
+                   <div className="dropdown-item" onClick={() => navigate('/profile', {
+                     state: { username, firstName }
+                   })}>
+                     <FaUserCircle className="dropdown-icon" /> Profile
+                   </div>
+                     <div className="dropdown-item">
+                       <FaCog className="dropdown-icon" />
+                       Settings
+                     </div>
+                     <div className="dropdown-item"onClick={handleLogout}>
+                       <FaSignOutAlt className="dropdown-icon" />
+                       Logout
+                     </div>
+                             </div>
+                           )}
         </div>
       </header>
 

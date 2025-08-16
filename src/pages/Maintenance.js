@@ -15,7 +15,7 @@ export default function Maintenance() {
 
 
   const location = useLocation();
-  const username = location.state?.username;
+  const username = location.state?.userName;
   const firstName = location.state?.firstName;
 
 const [dropdownOpen, setDropdownOpen] = useState(false); 

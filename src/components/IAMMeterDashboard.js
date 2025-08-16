@@ -16,7 +16,7 @@ import { FaLocationArrow } from "react-icons/fa6";
 export default function IAMMeterDashboard() {
 
   const location = useLocation();
-  const username = location.state?.username;
+  const username = location.state?.userName;
   const firstName = location.state?.firstName;
 
   const [dropdownOpen, setDropdownOpen] = useState(false); 
