@@ -1,0 +1,112 @@
+/* Main forecast container inside Card 3 */
+.admin-forecast-container {
+  width: 90%;
+  padding: 2%;
+  background: #118bf5b9;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Small variant for compact mode */
+.admin-forecast-container.small {
+  width: 100%;
+  max-width: 90%;
+  padding: 1%;
+}
+
+.admin-forecast-container h2 {
+  text-align: center;
+  margin-bottom: 2%;
+  color: #333;
+  font-size: 1.3rem;
+}
+
+.admin-forecast-container.small h2 {
+  font-size: 1rem;
+  margin-bottom: 1%;
+}
+
+/* Forecast days bar */
+.admin-forecast-bar {
+  display: flex;
+  gap: 2%;
+  justify-content: space-between;
+  overflow-x: auto;
+  width: 100%;
+  padding-bottom: 1%;
+}
+
+/* Each forecast day box */
+.forecast-day {
+  background: #fff;
+  border-radius: 0.7rem;
+  padding: 2%;
+  flex: 1 1 18%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+  cursor: default;
+}
+
+.admin-forecast-container.small .forecast-day {
+  padding: 1.5%;
+  flex: 1 1 16%;
+}
+
+/* Date */
+.date {
+  font-weight: 700;
+  margin-bottom: 5%;
+  color: #444;
+  font-size: 1em;
+}
+
+.admin-forecast-container.small .date {
+  font-size: 0.9em;
+  margin-bottom: 3%;
+}
+
+/* Icon */
+.icon {
+  font-size: 2.2rem;
+  margin-bottom: 4%;
+}
+
+.admin-forecast-container.small .icon {
+  font-size: 1.6rem;
+  margin-bottom: 3%;
+}
+
+/* Temperature */
+.temp {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #ff6f61;
+  margin-bottom: 4%;
+}
+
+.admin-forecast-container.small .temp {
+  font-size: 0.9rem;
+  margin-bottom: 2%;
+}
+
+/* Rain info */
+.rain {
+  font-size: 0.9rem;
+  color: #0066cc;
+  font-weight: 600;
+}
+
+.admin-forecast-container.small .rain {
+  font-size: 0.75rem;
+}
+
+.rain.no-rain {
+  color: #999;
+  font-weight: 400;
+  font-style: italic;
+}

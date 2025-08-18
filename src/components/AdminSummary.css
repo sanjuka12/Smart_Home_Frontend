@@ -1,0 +1,94 @@
+/* Container card */
+.admin-summary-card-container {
+  background-color: white;
+  padding: 2%;
+  border-radius: 1rem;
+  margin-top: -4%;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Title rectangle */
+.admin-light-blue-rectangle {
+  margin: 0;
+  background-color: #33aadd;
+  color: white;
+  padding: 1% 2%;
+  font-size: 1rem;
+  text-align: center;
+  width: 90%;
+  border-radius: 0.3rem;
+  margin-bottom: 1%;
+}
+
+/* Table container */
+.admin-summary-table {
+    margin-top: 10;
+  margin-top: 2%;
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem; /* space between rows */
+  align-items: center;
+}
+
+/* Row */
+.admin-summary-row {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 0.8rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  line-height: 0.5;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  width: 75%;
+}
+
+/* Left side: label */
+.admin-summary-label {
+  font-weight: 500;
+  color: #000000;
+}
+
+/* Right side: value */
+.admin-summary-value {
+  font-weight: bold;
+  color: #040404;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .admin-summary-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .admin-summary-value {
+    align-self: flex-end;
+  }
+}
+
+.admin-summary-row:nth-child(1) {
+  background-color: #d1e9f9; /* light blue */
+}
+
+.admin-summary-row:nth-child(2) {
+  background-color: #eaffd4; /* light green */
+}
+
+.admin-summary-row:nth-child(3) {
+  background-color: #feebcc; /* light orange */
+}
+
+.admin-summary-row:nth-child(4) {
+  background-color: #f7ccdb; /* light pink */
+}
+
+.admin-summary-row:nth-child(5) {
+  background-color: #decef6; /* light purple */
+}

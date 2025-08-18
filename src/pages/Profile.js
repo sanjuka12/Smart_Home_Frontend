@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation} from 'react-router-dom';
 import './Profile.css';
 import {
   CircularProgressbar,
@@ -20,6 +20,7 @@ export default function Profile() {
   const navigate = useNavigate();
   const username = location.state?.username;
   const firstName = location.state?.firstName;
+   const dropdownRef = useRef(null);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
@@ -115,13 +116,23 @@ const togglePicOptions = () => setPicOptionsOpen(!picOptionsOpen);
           <FaUserCircle className="profile-icon" />
           <span className="dropdown-arrow" onClick={toggleDropdown}>▼</span>
 
-          {dropdownOpen && (
-            <div className="dropdown-menu">
-              <div className="dropdown-item"><FaUserCircle className="dropdown-icon" /> Profile</div>
-              <div className="dropdown-item"><FaCog className="dropdown-icon" /> Settings</div>
-              <div className="dropdown-item"><FaSignOutAlt className="dropdown-icon" /> Logout</div>
-            </div>
-          )}
+{dropdownOpen && (
+           <div className="dropdown-menu" ref={dropdownRef}>
+<div className="dropdown-item" onClick={() => navigate('/profile', {
+  state: { username, firstName }
+})}>
+  <FaUserCircle className="dropdown-icon" /> Profile
+</div>
+  <div className="dropdown-item">
+    <FaCog className="dropdown-icon" />
+    Settings
+  </div>
+  <div className="dropdown-item"onClick={handleLogout}>
+    <FaSignOutAlt className="dropdown-icon" />
+    Logout
+  </div>
+          </div>
+        )}
         </div>
       </header>
  <div className="dashboard-content">

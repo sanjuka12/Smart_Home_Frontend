@@ -21,9 +21,9 @@ export default function PowerFlowDiagram() {
   const [gridAvailable, setGridAvailable] = useState("");
   const [loadDemand, setLoadDemand] = useState(""); // W*/
 
-  const solarPower = 50; // W
-  const batterySOC = 90; // %
-  const gridAvailable = false;
+  const solarPower = 0; // W
+  const batterySOC = 10; // %
+  const gridAvailable = true;
   const batteryCharging = true; // W (positive means importing, negative means exporting)
   const loadDemand = 100; // W
 
@@ -92,15 +92,14 @@ export default function PowerFlowDiagram() {
         <Plug size={30} />
         <p>Grid</p>
       </div>
-
-      {/* SVG Arrows */}
-      <svg className="arrows" width="300" height="200" viewBox="0 -100 300 300">
-
-        {/* Solar → Battery */}
+<div className="svg-container">
+  <svg className="arrows" width="300" height="200" viewBox="0 -100 400 300" >
+    
+          {/* Solar → Battery */}
         {flow.solarToBattery && (
           <>
-            <line x1="100" y1="-20" x2="175" y2="30" stroke="#03389bff" strokeWidth="3" />
-            <path id="pathSolarBattery" d="M 100 -20 L 175 30" fill="none" />
+            <line x1="10" y1="30" x2="110" y2="100" stroke="#03389bff" strokeWidth="3" />
+            <path id="pathSolarBattery" d="M 10 30 L 110 100" fill="none" />
             <g fill="#03389bff" stroke="none">
               <polygon points="0,-10 20,0 0,10" />
               <animateMotion dur="2s" repeatCount="indefinite" rotate="auto">
@@ -113,8 +112,8 @@ export default function PowerFlowDiagram() {
         {/* Solar → Load */}
         {flow.solarToLoad && (
           <>
-            <line x1="100" y1="-40" x2="330" y2="-40" stroke="#03389bff" strokeWidth="3" />
-            <path id="pathSolarLoad" d="M 100 -40 L 330 -40" fill="none" />
+            <line x1="10" y1="0" x2="300" y2="0" stroke="#03389bff" strokeWidth="3" />
+            <path id="pathSolarLoad" d="M 10 0 L 300 0" fill="none" />
             <g fill="#03389bff" stroke="none">
               <polygon points="0,-10 20,0 0,10" />
               <animateMotion dur="2s" repeatCount="indefinite" rotate="auto">
@@ -127,8 +126,8 @@ export default function PowerFlowDiagram() {
         {/* Solar → Grid */}
         {flow.solarToGrid && (
           <>
-            <line x1="100" y1="-50" x2="175" y2="-90" stroke="#03389bff" strokeWidth="3" />
-            <path id="pathSolarGrid" d="M 100 -50 L 175 -90" fill="none" />
+            <line x1="0" y1="-20" x2="100" y2="-90" stroke="#03389bff" strokeWidth="3" />
+            <path id="pathSolarGrid" d="M 0 -20 L 100 -90" fill="none" />
             <g fill="#03389bff" stroke="none">
               <polygon points="0,-10 20,0 0,10" />
               <animateMotion dur="2s" repeatCount="indefinite" rotate="auto">
@@ -141,8 +140,8 @@ export default function PowerFlowDiagram() {
         {/* Grid → Load */}
         {flow.gridToLoad && (
           <>
-            <line x1="240" y1="-100" x2="340" y2="-50" stroke="#018411ff" strokeWidth="3" />
-            <path id="pathGridLoad" d="M 240 -100 L 340 -50" fill="none" />
+            <line x1="190" y1="-90" x2="310" y2="-30" stroke="#018411ff" strokeWidth="3" />
+            <path id="pathGridLoad" d="M 190 -90 L 310 -30" fill="none" />
             <g fill="#018411ff" stroke="none">
               <polygon points="0,-10 20,0 0,10" />
               <animateMotion dur="2s" repeatCount="indefinite" rotate="auto">
@@ -155,8 +154,8 @@ export default function PowerFlowDiagram() {
         {/* Grid → Battery */}
         {flow.gridToBattery && (
           <>
-            <line x1="210" y1="-100" x2="210" y2="20" stroke="#018411ff" strokeWidth="3" />
-            <path id="pathGridBattery" d="M 210 -100 L 210 10" fill="none" />
+            <line x1="150" y1="-80" x2="150" y2="100" stroke="#018411ff" strokeWidth="3" />
+            <path id="pathGridBattery" d="M 150 -80 L 150 100" fill="none" />
             <g fill="#018411ff" stroke="none">
               <polygon points="0,-10 20,0 0,10" />
               <animateMotion dur="2s" repeatCount="indefinite" rotate="auto">
@@ -169,8 +168,8 @@ export default function PowerFlowDiagram() {
         {/* Battery → Load */}
         {flow.batteryToLoad && (
           <>
-            <line x1="240" y1="30" x2="340" y2="-10" stroke="#9a0101ff" strokeWidth="3" />
-            <path id="pathBatteryLoad" d="M 240 30 L 340 -10" fill="none" />
+            <line x1="190" y1="110" x2="310" y2="30" stroke="#9a0101ff" strokeWidth="3" />
+            <path id="pathBatteryLoad" d="M 190 110 L 310 30" fill="none" />
             <g fill="#9a0101ff" stroke="none">
               <polygon points="0,-10 20,0 0,10" />
               <animateMotion dur="2s" repeatCount="indefinite" rotate="auto">
@@ -181,6 +180,7 @@ export default function PowerFlowDiagram() {
         )}
 
       </svg>
+      </div>
     </div>
   );
 }

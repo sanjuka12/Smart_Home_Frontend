@@ -90,10 +90,10 @@ try {
       });
     if(data.role=="Administrator"){
       // ✅ Navigate to dashboard with username and firstName
-      // navigate('/dashboard', { state: { userName, firstName: data.firstName, role:data.role } });
+      navigate('/AdminDashboard', { state: { userName, firstName: data.firstName, role:data.role } });
     }
     else{
-      navigate('/dashboard', { state: { userName, firstName: data.firstName } });
+      navigate('/dashboard', { state: { userName, firstName: data.firstName, role:data.role } });
     }
 
     } else {
