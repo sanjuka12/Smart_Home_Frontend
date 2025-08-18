@@ -42,7 +42,7 @@ export default function LoginPage() {
       if (response.ok) {
         // ✅ Login successful
         console.log("Login success:", data);
-        navigate('/dashboard', { state: { userName,firstName: data.firstName } });
+      
       } else {
         // ❌ Login failed
         if (response.status === 404) {
@@ -88,9 +88,13 @@ try {
           role: data.role, // Assuming backend returns user's role
         }),
       });
-
+    if(data.role=="Administrator"){
       // ✅ Navigate to dashboard with username and firstName
+      // navigate('/dashboard', { state: { userName, firstName: data.firstName, role:data.role } });
+    }
+    else{
       navigate('/dashboard', { state: { userName, firstName: data.firstName } });
+    }
 
     } else {
       if (response.status === 404) {
@@ -123,7 +127,7 @@ try {
     {/* ✅ Right Side Login Box */}
     <div className="login-box">
       <img src="/assets/Dashboard.png" alt="Solar Logo" className="login-logo" />
-      <h2 className="login-title">Solar Monitoring System</h2>
+      <h2 className="login-title">Solar Monitoring Portal</h2>
       <form onSubmit={handleLogin}>
         <input
           type="text"
