@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import WeatherForecast from "./weatherforecast";
 import Profile from "../pages/Profile";
 import { FaLocationArrow } from "react-icons/fa6";
+import AdminPowerFlowDiagram from "../pages/AdminPowerFlowDiagram";
 
 
 export default function IAMMeterDashboard() {
@@ -18,6 +19,7 @@ export default function IAMMeterDashboard() {
   const location = useLocation();
   const username = location.state?.userName;
   const firstName = location.state?.firstName;
+  const role = location.state?.role;
 
   const [dropdownOpen, setDropdownOpen] = useState(false); 
   const [notificationsVisible, setNotificationsVisible] = useState(false);
