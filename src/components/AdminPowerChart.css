@@ -1,0 +1,36 @@
+.admin-power-chart-container {
+  background-color: white;
+  padding: 1%;              /* relative padding */
+  border-radius: 1rem;      /* rounded corners */
+  margin-top: 0%;
+  width: 100%;              /* fill the parent card */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 250px;
+}
+
+/* Title rectangle */
+.admin-light-blue-rectangle {
+  margin: 0;
+  margin-top: -3%;
+  background-color: #33aadd;
+  color: white;
+  padding: 1% 2%;
+  font-size: 1rem;
+  text-align: center;
+  width: 90%;
+  border-radius: 0.3rem;
+}
+
+/* Chart box adapts to parent (Card 2) */
+.admin-chart-box {
+  margin-top: 5%;
+  width: 95%;
+  height: 100%;        /* take up parent’s height */
+  max-height: 200px;   /* keep it within bounds */
+  min-height: 150px;   /* ensures readability */
+  margin-right: 5%;
+}
+

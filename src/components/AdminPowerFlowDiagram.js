@@ -28,8 +28,8 @@ export default function AdminPowerFlowDiagram() {
       <svg className="admin-arrows" width="300" height="200" viewBox="0 -100 300 300">
 
 
-            <line x1="10" y1="160" x2="290" y2="160" stroke="#03389bff" strokeWidth="3" />
-            <path id="admin-pathSolarLoad" d="M 10 160 L 290 160" fill="none" />
+            <line x1="30" y1="135" x2="270" y2="135" stroke="#03389bff" strokeWidth="3" />
+            <path id="admin-pathSolarLoad" d="M 30 135 L 270 135" fill="none" />
             <g fill="#03389bff" stroke="none">
               <polygon points="0,-10 20,0 0,10" />
               <animateMotion dur="2s" repeatCount="indefinite" rotate="auto">
@@ -38,8 +38,8 @@ export default function AdminPowerFlowDiagram() {
             </g>
           
       
-            <line x1="-10" y1="110" x2="125" y2="-50" stroke="#b60404ff" strokeWidth="3" />
-            <path id="admin-pathSolarGrid" d="M -10 110 L 125 -50" fill="none" />
+            <line x1="10" y1="95" x2="120" y2="-40" stroke="#b60404ff" strokeWidth="3" />
+            <path id="admin-pathSolarGrid" d="M 10 95 L 120 -40" fill="none" />
             <g fill="#b60404ff" stroke="none">
               <polygon points="0,-10 20,0 0,10" />
               <animateMotion dur="2s" repeatCount="indefinite" rotate="auto">
@@ -47,8 +47,8 @@ export default function AdminPowerFlowDiagram() {
               </animateMotion>
             </g>
           
-            <line x1="175" y1="-50" x2="310" y2="110" stroke="#018411ff" strokeWidth="3" />
-            <path id="admin-pathGridLoad" d="M 175 -50 L 310 110" fill="none" />
+            <line x1="180" y1="-40" x2="290" y2="95" stroke="#018411ff" strokeWidth="3" />
+            <path id="admin-pathGridLoad" d="M 180 -40 L 290 95" fill="none" />
             <g fill="#018411ff" stroke="none">
               <polygon points="0,-10 20,0 0,10" />
               <animateMotion dur="2s" repeatCount="indefinite" rotate="auto">

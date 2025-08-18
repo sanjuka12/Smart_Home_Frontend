@@ -16,6 +16,7 @@ import AddInverter from './pages/AddInverter';
 import Chart from './pages/Chart';
 import Support from './pages/Support';
 import DataLog from './pages/DataLog';
+import AdminDashboard from './components/AdminDashboard';
 
 import { SpeedInsights } from "@vercel/speed-insights/react"
 
@@ -41,6 +42,7 @@ function App() {
        <Route path="/Chart" element={<Chart/>} />
        <Route path="/support" element={<Support />} />
        <Route path="/DataLog" element={<DataLog />} />
+       <Route path="/AdminDashboard" element={<AdminDashboard />} />
        
         
 

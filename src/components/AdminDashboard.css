@@ -1,0 +1,89 @@
+ 
+.admin-cards-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  row-gap: 1%;      /* vertical gap */
+  column-gap: 1%;   /* horizontal gap */
+  margin-top: 0%;
+  padding-top: 2%;
+}
+
+.admin-dashboard-card {
+  background-color: rgb(255, 255, 255);
+  border-radius: 8px;
+  padding: 2%;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: -3%;
+}
+
+.card1-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0%;        /* gap between columns */
+  width: 90%;
+  height: 100%;
+  flex-wrap: nowrap; /* force single row */
+}
+
+/* Left side (Power Flow) */
+.powerflow-wrapper {
+  background-color: rgb(255, 255, 255);
+  width: 100%;      /* two columns fit in one row with gap */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4%;
+}
+
+/* Right side (Gauge) */
+.gen-gauge-wrapper {
+  background-color: rgb(255, 255, 255);
+  width: 48%;      /* remaining space */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 7%;
+}
+
+/* Optional: reduce column widths slightly for very small screens */
+@media (max-width: 500px) {
+  .powerflow-wrapper,
+  .gen-gauge-wrapper {
+    width: 49%;   /* still in one row */
+  }
+}
+
+
+.gen-gauge-wrapper h3 {
+  font-size: 1rem;
+  margin-bottom: 20%;
+  margin-top: -5%;
+}
+.gen-gauge-chart {
+  width: 90%;
+  height: 70%;
+  margin: 0 auto 1.5%;
+}
+
+/* Gauge label */
+.gen-gauge-label {
+  text-align: center;
+  font-size: 100%;
+  font-weight: bold;
+  margin-bottom: 10%;
+}
+
+
+/* Responsive: stack vertically on small screens */
+@media (max-width: 768px) {
+  .admin-cards-container {
+    grid-template-columns: 1fr;
+  }
+}
+

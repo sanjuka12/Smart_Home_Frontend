@@ -1,7 +1,7 @@
 .admin-power-flow-container {
   position: relative;
   width: 100%;        /* take full width of card */
-  max-width: 80%;     /* scale within card width */
+  max-width: 100%;     /* scale within card width */
   height: auto;
   aspect-ratio: 4 / 3; /* keeps proportions */
   margin: 0 auto;      /* center in card */
@@ -9,6 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: -6%;
 }
 
 /* Wrapper for each icon */
@@ -50,7 +51,7 @@
   flex-direction: column-reverse;
   align-items: center;
   font-size: 1vw;
-  top: 10%;
+  top: 2%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
