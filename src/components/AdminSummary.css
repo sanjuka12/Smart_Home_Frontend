@@ -74,21 +74,21 @@
 }
 
 .admin-summary-row:nth-child(1) {
-  background-color: #d1e9f9; /* light blue */
+  background-color: #b7d4e8; /* light blue */
 }
 
 .admin-summary-row:nth-child(2) {
-  background-color: #eaffd4; /* light green */
+  background-color: #93fc2298; /* light green */
 }
 
 .admin-summary-row:nth-child(3) {
-  background-color: #feebcc; /* light orange */
+  background-color: #e8c285; /* light orange */
 }
 
 .admin-summary-row:nth-child(4) {
-  background-color: #f7ccdb; /* light pink */
+  background-color: #f88eb3; /* light pink */
 }
 
 .admin-summary-row:nth-child(5) {
-  background-color: #decef6; /* light purple */
+  background-color: #af81f4; /* light purple */
 }

@@ -9,6 +9,7 @@ export default function LoginPage() {
   const [userName, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const firstName= useState('');
+  const inverterAccess= useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [passwordError, setPasswordError] = useState(false);
@@ -33,7 +34,8 @@ export default function LoginPage() {
         body: JSON.stringify({
           userName: userName,
           password: password,
-          firstName:firstName,
+          inverterAccess: inverterAccess
+
         }),
       });
 
@@ -69,6 +71,7 @@ try {
       body: JSON.stringify({
         userName: userName,
         password: password,
+        inverterAccess: inverterAccess
       }),
     });
 
@@ -86,14 +89,15 @@ try {
         body: JSON.stringify({
           userName: data.firstName,
           role: data.role, // Assuming backend returns user's role
+          inverterAccess: data.inverterAccess
         }),
       });
     if(data.role=="Administrator"){
       // ✅ Navigate to dashboard with username and firstName
-      navigate('/AdminDashboard', { state: { userName, firstName: data.firstName, role:data.role } });
+      navigate('/AdminDashboard', { state: { userName, firstName: data.firstName, role:data.role, inverterAccess: data.inverterAccess } });
     }
     else{
-      navigate('/dashboard', { state: { userName, firstName: data.firstName, role:data.role } });
+      navigate('/dashboard', { state: { userName, firstName: data.firstName, role:data.role , inverterAccess: data.inverterAccess} });
     }
 
     } else {
