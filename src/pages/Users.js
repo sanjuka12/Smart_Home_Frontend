@@ -10,8 +10,10 @@ export default function Users() {
 
 
   const location = useLocation();
-  const username = location.state?.userName;
+  const username = location.state?.username;
   const firstName = location.state?.firstName;
+  const role = location.state?.role;
+  const inverterAccess = location.state?.inverterAccess;
 
 const [filterDate, setFilterDate] = useState('');
 const [users, setUsers] = useState([]);
@@ -119,15 +121,22 @@ const handleLogout = () => {
         <aside className="dashboard-sidebar">
           <h2 className="sidebar-title">All Places</h2>
   <nav className="sidebar-nav">
- <NavLink to="/dashboard" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaTachometerAlt className="sidebar-icon" /> Dashboard</NavLink>
-  <NavLink to="/analytics1" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaChartBar className="sidebar-icon" /> Analytics / Reports</NavLink>
-  <NavLink to="/DeviceMap" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaLocationArrow className="sidebar-icon" /> Inverter Map</NavLink>
-  <NavLink to="/Available_Inverter" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaSolarPanel className="sidebar-icon" /> Devices / Inverters</NavLink>
-  <NavLink to="/Maintenance" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaTools className="sidebar-icon" /> Maintenance / Alerts</NavLink>
-  <NavLink to="/Users" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaUsers className="sidebar-icon" /> Users / Roles</NavLink>
-  <NavLink to="/Settings" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaCog className="sidebar-icon" /> Settings</NavLink>
-  <NavLink to="/support" state={{ userName: username, firstName: firstName }} className="sidebar-link"><FaQuestionCircle className="sidebar-icon" /> Support / Help</NavLink>
-</nav>
+<NavLink
+              to={role === "Administrator" ? "/AdminDashboard" : "/dashboard"}
+              state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }}
+              className="sidebar-link"
+            >
+              <FaTachometerAlt className="sidebar-icon" /> Dashboard
+            </NavLink>
+           
+            <NavLink to="/analytics1" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaChartBar className="sidebar-icon" /> Analytics / Reports</NavLink>
+            <NavLink to="/DeviceMap" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaLocationArrow className="sidebar-icon" /> Inverter Map</NavLink>
+            <NavLink to="/Available_Inverter" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaSolarPanel className="sidebar-icon" /> Devices / Inverters</NavLink>
+            <NavLink to="/Maintenance" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaTools className="sidebar-icon" /> Maintenance / Alerts</NavLink>
+            <NavLink to="/Users" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaUsers className="sidebar-icon" /> Users / Roles</NavLink>
+            <NavLink to="/Settings" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaCog className="sidebar-icon" /> Settings</NavLink>
+            <NavLink to="/support" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaQuestionCircle className="sidebar-icon" /> Support / Help</NavLink>
+          </nav>
         </aside>
 
         <main className="dashboard-main">
@@ -157,6 +166,7 @@ const handleLogout = () => {
       <div>Log In</div>
       <div>Username</div>
       <div>Role</div>
+      <div>INV Access</div>
     </div>
     {users.map((user, index) => (
       <div className="user-row" key={index}>
@@ -164,6 +174,7 @@ const handleLogout = () => {
         <div>{user.login}</div>
         <div>{user.userName}</div>
         <div className={`role ${user.role.toLowerCase()}`}>{user.role}</div>
+        <div>{user.inverterAccess}</div>
       </div>
     ))}
   </div>

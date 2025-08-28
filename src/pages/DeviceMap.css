@@ -103,3 +103,72 @@
 .search-button:hover {
   background-color: #07035f;
 }
+
+
+
+.secondary-button {
+  background-color: rgb(32, 92, 245);
+  color: #ffffff;
+  border: none;
+   margin-top: 20px;     /* Adjust as needed */
+  margin-bottom: 3px; 
+  margin-right: 85%;
+  border-radius: 1px;
+  width: 100px;
+  padding: 15px 15px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px; /* This creates space between children */
+  /* Remove white-space nowrap if exists */
+  white-space: normal !important;
+}
+
+.secondary-button:hover {
+  background-color: #565e64;
+}
+
+.console-button {
+  background-color: rgb(13, 101, 3);
+  color: #ffffff;
+  border: none;
+  margin-top: 20px;     /* Adjust as needed */
+  margin-bottom: 3px; 
+  margin-right: 85%;
+  border-radius: 1px;
+  width: 100px;
+  padding: 15px 15px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: normal !important;
+}
+
+.delete-button{
+  background-color: rgb(224, 12, 12);
+  color: #ffffff;
+  border: none;
+  margin-top: 20px;     /* Adjust as needed */
+  margin-bottom: 3px; 
+  margin-right: 95%;
+  border-radius: 1px;
+  width: 100px;
+  padding: 15px 15px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: normal !important;
+}
+
