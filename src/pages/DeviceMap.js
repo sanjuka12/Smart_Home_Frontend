@@ -62,7 +62,7 @@ export default function DeviceMap() {
   };
 
   const handleAddInverterClick = () => {
-    navigate('/AddInverter', { state: { username, firstName } });
+    navigate('/AddInverter', { state: { username, firstName, role, inverterAccess } });
   };
 
   const handleDeleteInverter = (id) => {
