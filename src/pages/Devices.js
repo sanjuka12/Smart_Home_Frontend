@@ -90,6 +90,25 @@ const Devices = () => {
 //   }
 // };
 
+
+// const fetchBatteryData = async () => {
+//   try {
+//     const res = await axios.get(`http://localhost:3000/realtimebatterydata/${inverterId}`);
+//     console.log('Fetched battery live data:', res.data);
+
+//     setBatteryData({
+//       gridStatus: mapBatteryStatus(res.data.gridStatus),
+//       voltage: res.data.voltage,
+//       current: res.data.current,
+//       power: res.data.power,
+//       soc: res.data.soc,
+//       timestamp: res.data.timestamp,
+//     });
+//   } catch (error) {
+//     console.error('Error fetching battery live data:', error);
+//   }
+// };
+
  useEffect(() => {
   if (!inverterId) return;
 
@@ -115,7 +134,7 @@ const Devices = () => {
         voltage: liveData.voltage,
         current: liveData.current,
         frequency: liveData.frequency,
-        solarpower: liveData.power,
+        solarpower: liveData.power*1000,
       });
     }
 
@@ -140,25 +159,6 @@ const Devices = () => {
   };
 }, [inverterId]);
 
-
-
-const fetchBatteryData = async () => {
-  try {
-    const res = await axios.get(`http://localhost:3000/realtimebatterydata/${inverterId}`);
-    console.log('Fetched battery live data:', res.data);
-
-    setBatteryData({
-      gridStatus: mapBatteryStatus(res.data.gridStatus),
-      voltage: res.data.voltage,
-      current: res.data.current,
-      power: res.data.power,
-      soc: res.data.soc,
-      timestamp: res.data.timestamp,
-    });
-  } catch (error) {
-    console.error('Error fetching battery live data:', error);
-  }
-};
 
   return (
     <div className="dashboard-container">
@@ -292,7 +292,7 @@ const fetchBatteryData = async () => {
     <span>{batteryData?.voltage ? `${batteryData.voltage} V` : "N/A"}</span>
   </div>
   <div className="info-row">
-    <span>Charging Current</span>
+    <span>Battery Current</span>
     <span>{batteryData?.current ? `${batteryData.current} A` : "N/A"}</span>
   </div>
   <div className="info-row">

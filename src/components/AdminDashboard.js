@@ -11,6 +11,8 @@ import Profile from "../pages/Profile";
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import axios from "axios";
+import io from "socket.io-client";
+
 
 
 
@@ -28,6 +30,10 @@ export default function AdminDashboard() {
   const [notificationsVisible, setNotificationsVisible] = useState(false);
   const notificationRef = useRef(null);
   const dropdownRef = useRef(null);
+  const [totalSolarPower, setTotalSolarPower] = useState(0);
+  const [inverters, setInverters] = useState([]);
+  const [socket, setSocket] = useState(null);
+
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -38,6 +44,57 @@ export default function AdminDashboard() {
       { id: 2, message: 'Battery at 90%', time: '10 mins ago' },
       { id: 3, message: 'System check completed', time: '1 hour ago' },
     ]);
+
+useEffect(() => {
+  const fetchInverters = async () => {
+    try {
+      const res = await axios.get("http://localhost:3000/listInverters");
+      setInverters(res.data);
+
+      // initialize WebSocket AFTER inverters are fetched
+      const s = io("http://localhost:3000", { transports: ["websocket"] });
+      setSocket(s);
+
+      s.on("connect", () => {
+        console.log("✅ Connected to WebSocket");
+        res.data.forEach((inv) => s.emit("subscribe", inv.UnitId));
+      });
+
+      s.on("newData", (liveData) => {
+        if (liveData.type !== "solar") return;
+
+        setInverters((prev) => {
+          const updated = prev.map((inv) =>
+            inv.UnitId === liveData.UnitId
+              ? {
+                  ...inv,
+                  Status: liveData.gridStatus || inv.Status,
+                  Generation: liveData.power ? liveData.power * 1000 : inv.Generation,
+                }
+              : inv
+          );
+
+          const totalPower = updated.reduce((sum, inv) => sum + (inv.Generation || 0), 0);
+          setTotalSolarPower(totalPower);
+
+          return updated;
+        });
+      });
+
+      s.on("disconnect", () => console.log("❌ WebSocket disconnected"));
+
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchInverters();
+
+  return () => {
+    socket?.disconnect();
+  };
+}, []);
+
   
 
 useEffect(() => {
@@ -63,13 +120,15 @@ useEffect(() => {
   };
 }, []);
 
+
+
+
 const handleLogout = () => {
   // clear tokens or session here if any
   navigate('/Loginpage');
 };
 
-const solarGenData = { solargenpower: 350 }; // example: 350 W
-  const solarGenMax = 1000; // example maximum value
+const solarGenMax = 3000; // example maximum value
      
 
 
@@ -170,7 +229,7 @@ const solarGenData = { solargenpower: 350 }; // example: 350 W
           <div className="gen-gauge-wrapper" style={{ width: "100%", maxWidth: "200px", aspectRatio: "1 / 1" }}>
   <div style={{ width: "100%", height: "100%" }}>
     <CircularProgressbarWithChildren
-      value={solarGenData?.solargenpower}
+      value={totalSolarPower}
       maxValue={solarGenMax}
       styles={buildStyles({
         pathColor: "#6006B6",
@@ -197,7 +256,7 @@ const solarGenData = { solargenpower: 350 }; // example: 350 W
 
         {/* Value + Unit inline */}
         <span style={{ fontSize: "150%", color: "#000", display: "flex", alignItems: "baseline", gap: "1%" }}>
-          {solarGenData?.solargenpower.toFixed(0)}
+          {totalSolarPower.toFixed(0)}
           <span style={{ fontSize: "100%", color: "#000000ff" }}>W</span>
         </span>
       </div>

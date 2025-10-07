@@ -17,7 +17,9 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   const apiUrl = 'http://localhost:3000';
-  // const apiUrl = 'https://smart-home-backend-jv5h.onrender.com';
+  
+  //const apiUrl = 'http://147.93.30.1:3000';
+  
 
 
   const handleLogin = async (e) => {

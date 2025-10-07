@@ -13,7 +13,20 @@ export default function Available_Inverter() {
   const inverterAccess = location.state?.inverterAccess;
   const dropdownRef = useRef(null);
 
- 
+const mapGridStatus = (statusCode) => {
+  const statusMap = {
+    1: { label: "OFF", color: "gray" },
+    2: { label: "Sleep", color: "gray" },
+    3: { label: "Starting", color: "blue" },
+    4: { label: "Generating", color: "green" },
+    5: { label: "Throttled", color: "orange" },
+    6: { label: "Shutting Down", color: "purple" },
+    7: { label: "Fault", color: "red" },
+    8: { label: "Standby", color: "gold" }
+  };
+
+  return statusMap[statusCode] || { label: "Unknown", color: "black" };
+};
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggleDropdown = () => {
@@ -24,11 +37,11 @@ const navigate = useNavigate();
   const [inverters, setInverters] = useState([]);
 
   const handleAddInverter = () => {
-    navigate('/AddInverter', { state: { username, firstName } });
+    navigate('/AddInverter', { state: { username, firstName, role, inverterAccess } });
   };
 
     const handleDataLog = () => {
-    navigate('/DataLog', { state: { username, firstName } });
+    navigate('/DataLog', { state: { username, firstName, role, inverterAccess } });
   };
 
 const handleLogout = () => {
@@ -48,7 +61,8 @@ useEffect(() => {
         Type: inv.Type,
         Location: inv.Location,
         Status: "—", // default empty
-        Power: 0     // default empty
+        Power: 0  ,   // default empty
+        InstalledCapacity: inv.InstalledCapacity,
       }));
 
       setInverters(inverterList);
@@ -70,24 +84,25 @@ useEffect(() => {
     socket.on("connect", () => console.log("✅ Connected to WebSocket"));
 
     // subscribe each inverter id
+    
     inverters.forEach((inv) => {
       socket.emit("subscribe", inv.UnitId);
     });
-
+  
     // when live data comes, update only that row
     socket.on("newData", (liveData) => {
-      setInverters((prev) =>
-        prev.map((inv) =>
-          inv.UnitId === liveData.UnitId
-            ? {
-                ...inv,
-                Status: liveData.gridStatus || inv.Status,
-                Generation: liveData.power ?? inv.Generation,
-              }
-            : inv
-        )
-      );
-    });
+  setInverters((prev) =>
+    prev.map((inv) =>
+      inv.UnitId === liveData.UnitId && liveData.type === "solar"
+        ? {
+            ...inv,
+            Status: liveData.gridStatus || inv.Status,
+            Generation: liveData.power ? liveData.power * 1000 : inv.Generation,
+          }
+        : inv
+    )
+  );
+});
 
     socket.on("disconnect", () => console.log("❌ WebSocket disconnected"));
 
@@ -191,7 +206,9 @@ useEffect(() => {
                       <th>Type</th>
                       <th>Location</th>
                       <th>Status</th>
-                      <th>Generation</th>
+                      <th>Generation (w)</th>
+                      <th>Installed Capacity(kw)</th>
+
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -202,8 +219,15 @@ useEffect(() => {
                         <td>{inv.Name}</td>
                         <td>{inv.Type}</td>
                         <td>{inv.Location}</td>
-                        <td>{inv.Status}</td>
-                        <td>{inv.Generation} </td>
+                        <td style={{ color: mapGridStatus(inv.Status).color }}>
+                            {mapGridStatus(inv.Status).label}
+                      </td>
+                       <td>
+                          {inv.Generation} <span style={{ marginLeft: "4px" }}>W</span>
+                      </td>
+                       <td>
+                          {inv.InstalledCapacity} <span style={{ marginLeft: "4px" }}>kW</span>
+                      </td>
                         <td className="actions">
                           <FaEye title="View" />
                           <FaEdit title="Edit" />
