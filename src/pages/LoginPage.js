@@ -16,9 +16,9 @@ export default function LoginPage() {
   const passwordRef = useRef(null);
   const navigate = useNavigate();
 
-  const apiUrl = 'http://localhost:3000';
+  //const apiUrl = 'http://localhost:3000';
   
-  //const apiUrl = 'http://147.93.30.1:3000';
+  const apiUrl = 'http://147.93.30.1:3000';
   
 
 
