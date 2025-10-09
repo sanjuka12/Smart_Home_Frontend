@@ -22,7 +22,9 @@ export default function Profile() {
   const firstName = location.state?.firstName;
   const role = location.state?.role;
   const inverterAccess = location.state?.inverterAccess;
-   const dropdownRef = useRef(null);
+  const dropdownRef = useRef(null);
+
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
@@ -38,7 +40,7 @@ export default function Profile() {
 useEffect(() => {
   if (username) {
     axios
-      .get(`http://localhost:3000/users/${encodeURIComponent(username)}`)
+      .get(`${apiUrl}/users/${encodeURIComponent(username)}`)
       .then(res => {
         const data = res.data;
         setProfileData({

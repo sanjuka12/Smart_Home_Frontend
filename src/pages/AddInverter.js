@@ -18,6 +18,8 @@ export default function AddInverter() {
   const inverterAccess = location.state?.inverterAccess;
   const locationData = location.state?.selectedLocation;
   const previousData = location.state?.newInverterData;
+
+  const apiUrl = process.env.REACT_APP_API_URL;
    
     
 
@@ -110,7 +112,7 @@ const handleRedirectToMap = () => {
         Status: "Waiting"
       };
 
-      const response = await axios.post('http://localhost:3000/addinverter', postData);
+      const response = await axios.post(`${apiUrl}/addinverter`, postData);
 
       if (response.status === 200 || response.status === 201) {
         alert('✅ Inverter added successfully!');

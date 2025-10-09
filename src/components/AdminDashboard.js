@@ -34,6 +34,8 @@ export default function AdminDashboard() {
   const [inverters, setInverters] = useState([]);
   const [socket, setSocket] = useState(null);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -48,11 +50,11 @@ export default function AdminDashboard() {
 useEffect(() => {
   const fetchInverters = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/listInverters");
+      const res = await axios.get(`${apiUrl}/listInverters`);
       setInverters(res.data);
 
       // initialize WebSocket AFTER inverters are fetched
-      const s = io("http://localhost:3000", { transports: ["websocket"] });
+      const s = io(`${apiUrl}`, { transports: ["websocket"] });
       setSocket(s);
 
       s.on("connect", () => {

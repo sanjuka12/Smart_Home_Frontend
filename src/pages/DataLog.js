@@ -21,6 +21,8 @@ export default function DataLog() {
   const [errorMessage, setErrorMessage] = useState("");
   const [allData, setAllData] = useState([]);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+
 // Mapping gridStatus codes to text
 const mapGridStatus = (statusCode) => {
   const statusMap = {
@@ -51,7 +53,7 @@ const mapBatteryStatus = (statusCode) => {
     useEffect(() => {
   const fetchSolarData = async () => {
     try {
-      const response = await fetch('http://localhost:3000/solarinverterdata');
+      const response = await fetch(`${apiUrl}/solarinverterdata`);
       if (!response.ok) throw new Error("Failed to fetch solar inverter data");
       const data = await response.json();
 
@@ -65,7 +67,7 @@ const mapBatteryStatus = (statusCode) => {
 
   const fetchBatteryData = async () => {
     try {
-      const response = await fetch('http://localhost:3000/batteryinverterdata');
+      const response = await fetch(`${apiUrl}/batteryinverterdata`);
       if (!response.ok) throw new Error("Failed to fetch battery inverter data");
       const data = await response.json();
 

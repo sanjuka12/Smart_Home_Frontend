@@ -17,11 +17,10 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   //const apiUrl = 'http://localhost:3000';
-  
-  const apiUrl = 'http://147.93.30.1:3000';
-  
+  // const apiUrl = 'http://147.93.30.1:3000';
 
-
+  const apiUrl = process.env.REACT_APP_API_URL;
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');

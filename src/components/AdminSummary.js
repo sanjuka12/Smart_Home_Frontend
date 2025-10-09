@@ -11,10 +11,12 @@ export default function AdminSummary() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     const fetchInverterSummary = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/inverters/summary"); // adjust URL/port
+        const res = await axios.get(`${apiUrl}/inverters/summary`); // adjust URL/port
         setSummary({
           totalItems: res.data.totalItems,
           overallCapacity: res.data.overallCapacity

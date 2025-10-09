@@ -47,6 +47,8 @@ const Devices = () => {
   const inverterId = location.state?.inverterId;
   const inverterName = location.state?.inverterName;
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   const [batteryPercentage, setBatteryPercentage] = useState(0); // or any initial value
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -112,7 +114,7 @@ const Devices = () => {
  useEffect(() => {
   if (!inverterId) return;
 
-  const socket = io("http://localhost:3000", {
+  const socket = io(`${apiUrl}`, {
     transports: ["websocket"], // ensure WebSocket transport
   });
 
