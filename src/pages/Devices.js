@@ -114,9 +114,14 @@ const Devices = () => {
  useEffect(() => {
   if (!inverterId) return;
 
-  const socket = io(`${apiUrl}`, {
-    transports: ["websocket"], // ensure WebSocket transport
-  });
+  // const socket = io(`${apiUrl}`, {
+  //   transports: ["websocket"], // ensure WebSocket transport
+  // });
+
+  //const socket = io("http://147.93.30.1:3000", { transports: ["websocket"] });
+
+
+  const socket = io("http://147.93.30.1:3000", { transports: ["websocket"] });
 
   socket.on("connect", () => {
     console.log("✅ Connected to Socket.IO server");

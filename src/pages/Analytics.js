@@ -39,6 +39,7 @@ export default function Analytics() {
   };
 
 const [chartData, setChartData] = useState([]);
+const [batteryData, setBatteryData] = useState([]);
 
   const handleAddChart = () => {
     navigate('/Chart', { state: { username, firstName } });
@@ -83,6 +84,42 @@ console.log("Final chartData:", formatted);
     });
 }, []);
 
+
+useEffect(() => {
+  axios.get(`${apiUrl}/realtimebatterydata`)
+    .then(response => {
+      const todayMidnight = new Date();
+      todayMidnight.setHours(0, 0, 0, 0);
+
+      const formattedBattery = response.data
+        .filter(item => {
+          const ts = item.timestamp;
+          const date = ts && ts._seconds ? new Date(ts._seconds * 1000) : null;
+          return date && date >= todayMidnight;
+        })
+        .map(item => {
+          const ts = item.timestamp;
+          const date = new Date(ts._seconds * 1000);
+          const minutes = date.getHours() * 60 + date.getMinutes();
+
+          return {
+            time: minutes,
+            timeLabel: date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            soc: Number(item.soc) || 0,  // state of charge %
+            voltage: item.voltage,
+            current: item.current,
+            power: item.power,
+            gridStatus: item.gridStatus,
+          };
+        });
+
+      console.log("Final batteryData:", formattedBattery);
+      setBatteryData(formattedBattery);
+    })
+    .catch(error => {
+      console.error('Error fetching battery data:', error);
+    });
+}, [apiUrl]);
 
   // **NEW: get current time in minutes for X axis domain**
   const now = new Date();
@@ -194,7 +231,7 @@ const handleLogout = () => {
                 <div className="chart-section">
                   <h2 className="chart-title">Battery Status Over Time</h2>
                   <ResponsiveContainer width="100%" height={180}>
-                    <LineChart data={chartData}>
+                    <LineChart data={batteryData}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis
                         dataKey="time"  // numeric minutes
@@ -210,7 +247,7 @@ const handleLogout = () => {
   type="monotone" 
   dataKey="battery" 
   stroke="Blue" 
-  name="Battery Percentage (%)" 
+  name="Battery SOC (%)" 
   dot={false}                 // hides all dots
   activeDot={{ r: 6, strokeWidth: 2, stroke: '#4fc1e9', fill: 'white' }}  // visible on hover with styling
 />
