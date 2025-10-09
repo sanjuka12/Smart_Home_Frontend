@@ -13,6 +13,8 @@ export default function Available_Inverter() {
   const inverterAccess = location.state?.inverterAccess;
   const dropdownRef = useRef(null);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+
 const mapGridStatus = (statusCode) => {
   const statusMap = {
     1: { label: "OFF", color: "gray" },
@@ -52,7 +54,7 @@ const handleLogout = () => {
 useEffect(() => {
   const fetchInverters = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/listInverters');
+      const res = await axios.get(`${apiUrl}/listInverters`);
 
       // Keep only static fields, initialize live fields with defaults
       const inverterList = res.data.map(inv => ({
@@ -79,7 +81,7 @@ useEffect(() => {
   useEffect(() => {
     if (inverters.length === 0) return;
 
-    const socket = io("http://localhost:3000", { transports: ["websocket"] });
+    const socket = io(`${apiUrl}`, { transports: ["websocket"] });
 
     socket.on("connect", () => console.log("✅ Connected to WebSocket"));
 

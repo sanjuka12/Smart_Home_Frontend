@@ -18,6 +18,9 @@ export default function Users() {
 const [filterDate, setFilterDate] = useState('');
 const [users, setUsers] = useState([]);
 const [dropdownOpen, setDropdownOpen] = useState(false); 
+
+const apiUrl = process.env.REACT_APP_API_URL;
+
   
     const toggleDropdown = () => {
       setDropdownOpen(!dropdownOpen);
@@ -26,7 +29,7 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
  useEffect(() => {
   const fetchUsers = async () => {
     try {
-      let url = 'http://localhost:3000/userlog';
+      let url = `${apiUrl}/userlog`;
 
       if (filterDate) {
         const formattedDate = formatDateToDDMMYYYY(filterDate);

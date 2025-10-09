@@ -52,6 +52,8 @@ export default function DeviceMap() {
   const [inverters, setInverters] = useState([]);
   const [tempLocation, setTempLocation] = useState(null);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   // This holds data for new inverter if passed during navigation
   const newInverterData = location.state?.newInverterData || null;
 
@@ -124,7 +126,7 @@ export default function DeviceMap() {
   useEffect(() => {
     const fetchInverters = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/listInverters');
+        const res = await axios.get(`${apiUrl}/listInverters`);
         const formatted = res.data.map(inv => ({
           ...inv,
           lat: parseFloat(inv.Latitude),

@@ -32,6 +32,8 @@ export default function Analytics() {
   const inverterAccess = location.state?.inverterAccess;
   const dropdownRef = useRef(null);
 
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
@@ -45,7 +47,7 @@ const [chartData, setChartData] = useState([]);
 
 
  useEffect(() => {
-  axios.get('http://localhost:3000/solarinverterdata')
+  axios.get(`${apiUrl}/solarinverterdata`)
     .then(response => {
       const todayMidnight = new Date();
       todayMidnight.setHours(0, 0, 0, 0);
