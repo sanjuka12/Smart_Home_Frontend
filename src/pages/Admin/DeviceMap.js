@@ -42,7 +42,7 @@ function LocationSelector({ onSelect }) {
 
 export default function DeviceMap() {
   const location = useLocation();
-  const username = location.state?.useName;
+  const username = location.state?.userName;
   const firstName = location.state?.firstName;
   const role = location.state?.role;
   const inverterAccess = location.state?.inverterAccess;
@@ -172,10 +172,9 @@ export default function DeviceMap() {
 
           {dropdownOpen && (
             <div className="dropdown-menu">
-              <div className="dropdown-item" onClick={() => navigate('/profile', {
-                state: { username, firstName }
-              })}>
-                <FaUserCircle className="dropdown-icon" /> Profile
+              <div className="dropdown-item" onClick={() => navigate('/Profile', {state: {userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess}})}>
+                <FaUserCircle className="dropdown-icon" />
+                Profile
               </div>
               <div className="dropdown-item"><FaCog className="dropdown-icon" /> Settings</div>
               <div className="dropdown-item" onClick={handleLogout}><FaSignOutAlt className="dropdown-icon" /> Logout</div>
@@ -218,11 +217,13 @@ export default function DeviceMap() {
               >
                 + Add Inverter
               </button>
+
+              
             </div>
 
             <MapContainer
               center={[6.0383, 80.3909]}
-              zoom={11}
+              zoom={9}
               minZoom={6}
               maxBounds={[[5.85, 79.6], [9.85, 82.1]]}
               maxBoundsViscosity={1.0}

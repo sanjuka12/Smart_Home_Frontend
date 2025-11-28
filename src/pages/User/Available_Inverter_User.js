@@ -1,13 +1,16 @@
 import React, { useState,useEffect, useRef} from "react";
-import "./Available_Inverter.css";
+import "./Available_Inverter_User.css";
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { FaEdit, FaEye, FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools, FaUsers, FaCog, FaQuestionCircle, FaUserCircle, FaBell, FaSignOutAlt, FaTrashAlt, FaLocationArrow } from 'react-icons/fa';
 import axios from "axios";
 import io from "socket.io-client";
+import DeviceSearch from "../Admin/DeviceSearch";
 
-export default function Available_Inverter() {
+
+
+export default function Available_Inverter_User() {
   const location = useLocation();
-  const username = location.state?.username;
+  const username = location.state?.userName;
   const firstName = location.state?.firstName;
   const role = location.state?.role;
   const inverterAccess = location.state?.inverterAccess;
@@ -15,19 +18,21 @@ export default function Available_Inverter() {
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
-const mapGridStatus = (statusCode) => {
+const mapGridStatus = (statusText) => {
   const statusMap = {
-    1: { label: "OFF", color: "gray" },
-    2: { label: "Sleep", color: "gray" },
-    3: { label: "Starting", color: "blue" },
-    4: { label: "Generating", color: "green" },
-    5: { label: "Throttled", color: "orange" },
-    6: { label: "Shutting Down", color: "purple" },
-    7: { label: "Fault", color: "red" },
-    8: { label: "Standby", color: "gold" }
+    "OFF": { color: "gray" },
+    "Sleep": { color: "gray" },
+    "Starting": { color: "blue" },
+    "Generating": { color: "green" },
+    "Throttled": { color: "orange" },
+    "Shutting Down": { color: "purple" },
+    "Waiting": { color: "Red" },
+    "Fault": { color: "red" },
+    "Flash": { color: "red" },
+    "Standby": { color: "gold" }
   };
 
-  return statusMap[statusCode] || { label: "Unknown", color: "black" };
+  return statusMap[statusText] || { color: "black" }; // default color if unknown
 };
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -36,15 +41,27 @@ const mapGridStatus = (statusCode) => {
   };
 const navigate = useNavigate();
 
+const [showSearchPopup, setShowSearchPopup] = useState(false);
+
   const [inverters, setInverters] = useState([]);
 
   const handleAddInverter = () => {
     navigate('/AddInverter', { state: { username, firstName, role, inverterAccess } });
   };
 
+
     const handleDataLog = () => {
     navigate('/DataLog', { state: { username, firstName, role, inverterAccess } });
   };
+
+    const handleSearchInverter = () => {
+    setShowSearchPopup(true); // open popup
+  };
+
+  const handleClosePopup = () => {
+    setShowSearchPopup(false); // close popup
+  };
+
 
 const handleLogout = () => {
   // clear tokens or session here if any
@@ -57,24 +74,46 @@ useEffect(() => {
       const res = await axios.get(`${apiUrl}/listInverters`);
 
       // Keep only static fields, initialize live fields with defaults
-      const inverterList = res.data.map(inv => ({
+      let inverterList = res.data.map(inv => ({
         UnitId: inv.UnitId,
         Name: inv.Name,
         Type: inv.Type,
         Location: inv.Location,
-        Status: "—", // default empty
-        Power: 0  ,   // default empty
+        Status: "Waiting",
+        Generation: 0,
         InstalledCapacity: inv.InstalledCapacity,
       }));
 
+      // ✅ Filter by assigned inverterAccess
+      if (inverterAccess) {
+        if (Array.isArray(inverterAccess)) {
+          // Case 1: inverterAccess is an array of IDs
+          inverterList = inverterList.filter(inv =>
+            inverterAccess.includes(inv.UnitId)
+          );
+        } else if (typeof inverterAccess === "string" && inverterAccess.includes(",")) {
+          // Case 2: inverterAccess is a comma-separated string
+          const allowedIds = inverterAccess.split(",").map(id => id.trim());
+          inverterList = inverterList.filter(inv =>
+            allowedIds.includes(inv.UnitId)
+          );
+        } else {
+          // Case 3: single inverter ID
+          inverterList = inverterList.filter(inv =>
+            inv.UnitId === inverterAccess
+          );
+        }
+      }
+
       setInverters(inverterList);
     } catch (err) {
-      console.error('Error fetching inverter data:', err);
+      console.error("Error fetching inverter data:", err);
     }
   };
 
   fetchInverters();
-}, []);
+}, [apiUrl, inverterAccess]);
+
 
 //fetching data from web sockets without involvement of the DB
 
@@ -131,11 +170,10 @@ useEffect(() => {
 
          {dropdownOpen && (
                     <div className="dropdown-menu" ref={dropdownRef}>
-         <div className="dropdown-item" onClick={() => navigate('/profile', {
-           state: { username, firstName }
-         })}>
-           <FaUserCircle className="dropdown-icon" /> Profile
-         </div>
+              <div className="dropdown-item" onClick={() => navigate('/Profile_User', {state: {userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess}})}>
+                <FaUserCircle className="dropdown-icon" />
+                Profile
+              </div>
            <div className="dropdown-item">
              <FaCog className="dropdown-icon" />
              Settings
@@ -163,38 +201,39 @@ useEffect(() => {
               <FaTachometerAlt className="sidebar-icon" /> Dashboard
             </NavLink>
             
-            <NavLink to="/analytics1" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaChartBar className="sidebar-icon" /> Analytics / Reports</NavLink>
-            <NavLink to="/DeviceMap" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaLocationArrow className="sidebar-icon" /> Inverter Map</NavLink>
-            <NavLink to="/Available_Inverter" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaSolarPanel className="sidebar-icon" /> Devices / Inverters</NavLink>
-            <NavLink to="/Maintenance" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaTools className="sidebar-icon" /> Maintenance / Alerts</NavLink>
-            <NavLink to="/Users" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaUsers className="sidebar-icon" /> Users / Roles</NavLink>
-            <NavLink to="/Settings" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaCog className="sidebar-icon" /> Settings</NavLink>
-            <NavLink to="/support" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaQuestionCircle className="sidebar-icon" /> Support / Help</NavLink>
+           <NavLink to="/analytics1_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaChartBar className="sidebar-icon" /> Analytics / Reports</NavLink>
+           <NavLink to="/Devices_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaLocationArrow className="sidebar-icon" /> Generation Status</NavLink>
+           <NavLink to="/Available_Inverter_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaSolarPanel className="sidebar-icon" /> Inverter Status</NavLink>
+           <NavLink to="/LoadFlow_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaUsers className="sidebar-icon" /> Load Management</NavLink>
+           <NavLink to="/Maintenance_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaTools className="sidebar-icon" /> Maintenance / Alerts</NavLink>
+           <NavLink to="/Settings_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaCog className="sidebar-icon" /> Settings</NavLink>
+           <NavLink to="/support_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaQuestionCircle className="sidebar-icon" /> Support / Help</NavLink>
           </nav>
         </aside>
 
         <main className="dashboard-main">
           <section className="yield-section">
-            <h2 className="section-title">Inverter List</h2>
+            <h2 className="section-title">Inverter Status</h2>
 
             {/* Add Button */}
           <div className="add-inverter-container">
 
-                      <button className="delete-button" onClick={handleAddInverter}>
+                      {/* <button className="delete-button" onClick={handleAddInverter}>
             Delete
             </button>
-
-          <button className="secondary-button" onClick={handleAddInverter}>
+             <button className="secondary-button" onClick={handleSearchInverter}>
             Search
             </button>
+             {showSearchPopup && <DeviceSearch onClose={handleClosePopup} />}
 
+           
            <button className="console-button " onClick={handleDataLog}>
             Data Logs
             </button>
 
       <button className="add-inverter-button" onClick={handleAddInverter}>
          <span className="plus-sign">+</span>Add Inverter
-          </button>
+          </button> */}
       </div>
 
 
@@ -221,9 +260,21 @@ useEffect(() => {
                         <td>{inv.Name}</td>
                         <td>{inv.Type}</td>
                         <td>{inv.Location}</td>
-                        <td style={{ color: mapGridStatus(inv.Status).color }}>
-                            {mapGridStatus(inv.Status).label}
-                      </td>
+<td style={{ verticalAlign: "middle", padding: "8px 10px" }}>
+  <span
+    className={inv.Status === "Generating" ? "blinking-square" : ""}
+    style={{
+      display: "inline-block",
+      width: "12px",
+      height: "12px",
+      borderRadius: "3px",
+      backgroundColor: mapGridStatus(inv.Status).color,
+      marginRight: "6px",
+      verticalAlign: "middle",
+    }}
+  ></span>
+  <span style={{ verticalAlign: "middle" }}>{inv.Status}</span>
+</td>
                        <td>
                           {inv.Generation} <span style={{ marginLeft: "4px" }}>W</span>
                       </td>

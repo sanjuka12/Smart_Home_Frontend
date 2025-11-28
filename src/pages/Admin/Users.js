@@ -10,7 +10,7 @@ export default function Users() {
 
 
   const location = useLocation();
-  const username = location.state?.username;
+  const username = location.state?.userName;
   const firstName = location.state?.firstName;
   const role = location.state?.role;
   const inverterAccess = location.state?.inverterAccess;
@@ -100,11 +100,10 @@ const handleLogout = () => {
       
               {dropdownOpen && (
                 <div className="dropdown-menu">
-<div className="dropdown-item" onClick={() => navigate('/profile', {
-  state: { username, firstName }
-})}>
-  <FaUserCircle className="dropdown-icon" /> Profile
-</div>
+              <div className="dropdown-item" onClick={() => navigate('/Profile', {state: {userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess}})}>
+                <FaUserCircle className="dropdown-icon" />
+                Profile
+              </div>
         <div className="dropdown-item">
           <FaCog className="dropdown-icon" />
           Settings

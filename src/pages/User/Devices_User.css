@@ -1,0 +1,89 @@
+/* Devices.css */
+
+.device-container {
+    display: flex;
+    justify-content: space-around;
+    padding: 30px;
+    background: linear-gradient(to right, #f0f4f8, #e0f7fa);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+.device-cards-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  gap: 30 px;
+  padding: 40px;
+  flex: 1;
+  background-color: white;
+}
+
+
+  .device-card {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 15px;
+  width: 350px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0);
+  margin-top: -60px;
+}
+.sidebar {
+  width: 250px;
+  background-color: #4f46e5;
+  color: white;
+  padding: 20px;
+}
+
+  .status-text {
+  font-size: 14px;
+  text-align: center;
+  color: green;
+  margin-bottom: 10px;
+  
+}
+
+.gauge-chart {
+  width: 220px;
+  height: 220px;
+  margin: 0 auto 20px;
+}
+
+/* Gauge label */
+.gauge-label {
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Info row styling */
+.info-row {
+  background-color: #99BDFF;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+/* Small status badge */
+.badge {
+  background-color: #c7d2fe;
+  border: 2px solid #c7d2fe;
+  border-radius: 8px;
+  padding: 2px 8px;
+  font-size: 15px;
+}
+
+ 
+  
+  .dashboard-sidebar {
+    background-color: #2671ea;
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    flex: 1;
+    max-width: 250px;
+  }

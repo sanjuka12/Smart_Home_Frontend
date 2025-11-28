@@ -1,0 +1,175 @@
+
+/* Leaflet map */
+.leaflet-map {
+
+  width: 100%;
+  height: 500px; 
+  border-radius: 1px;
+  border: 1px solid #ccc;
+  margin-bottom: 25px;
+}
+
+.leaflet-popup-content button {
+  padding: 6px 12px;
+  margin-top: 6px;
+  margin-right: 6px;
+  margin-left: 6px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  width: 100%;
+  text-align: center;
+}
+
+/* View button */
+.leaflet-popup-content button:first-of-type {
+  background-color: #0077cc;
+  color: white;
+}
+
+.leaflet-popup-content button:first-of-type:hover {
+  background-color: #0077cc;
+}
+
+/* Delete button */
+.leaflet-popup-content button:nth-of-type(2) {
+  background-color: #aa0202;
+  color: white;
+}
+
+.leaflet-popup-content button:nth-of-type(2):hover {
+  background-color: #0077cc;
+}
+
+/* Container for Add Inverter button - centers button below title */
+.add-inverter-button-container {
+  display: flex;
+  justify-content: flex-end; /* Pushes button to the right */
+  align-items: center;
+  margin-bottom: 10px;
+  margin-top: 5px;
+ 
+}
+
+/* Add Inverter button styling */
+.add-inverter-button {
+  background-color: rgb(32, 92, 245);
+  color: #ffffff;
+  border: none;
+  border-radius: 1px;
+  width: 160px;
+  padding: 15px 15px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px; 
+  white-space: normal !important;
+}
+.add-inverter-button:hover {
+  background-color: #023262;
+}
+
+/* for search bar */
+
+.map-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.search-input {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 100px;
+}
+
+.search-button {
+  background-color: #0B048E;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.search-button:hover {
+  background-color: #07035f;
+}
+
+
+
+.secondary-button {
+  background-color: rgb(32, 92, 245);
+  color: #ffffff;
+  border: none;
+   margin-top: 20px;     /* Adjust as needed */
+  margin-bottom: 3px; 
+  margin-right: 85%;
+  border-radius: 1px;
+  width: 100px;
+  padding: 15px 15px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px; /* This creates space between children */
+  /* Remove white-space nowrap if exists */
+  white-space: normal !important;
+}
+
+.secondary-button:hover {
+  background-color: #565e64;
+}
+
+.console-button {
+  background-color: rgb(13, 101, 3);
+  color: #ffffff;
+  border: none;
+  margin-top: 20px;     /* Adjust as needed */
+  margin-bottom: 3px; 
+  margin-right: 85%;
+  border-radius: 1px;
+  width: 100px;
+  padding: 15px 15px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: normal !important;
+}
+
+.delete-button{
+  background-color: rgb(224, 12, 12);
+  color: #ffffff;
+  border: none;
+  margin-top: 20px;     /* Adjust as needed */
+  margin-bottom: 3px; 
+  margin-right: 95%;
+  border-radius: 1px;
+  width: 100px;
+  padding: 15px 15px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: normal !important;
+}
+

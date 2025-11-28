@@ -1,0 +1,162 @@
+
+.chart-controls {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.axis-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-left: 50px;
+  gap: 15px;
+}
+
+.axis-group label {
+  font-weight: bold;
+  margin-top: 25px;
+  margin-bottom: 5px;
+  margin-right: 25px;
+  margin-left: 1px;
+}
+
+.axis-group select {
+  padding: 10px 10px;
+  font-size: 15px;
+  width: 225px;
+  margin-left: 30px;
+  background-color: #accbff;
+  border-radius: 5px;
+  color: #484848;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-start; /* <-- left-aligns button */
+  width: 100%;
+  box-sizing: border-box;
+  
+}
+
+.button-container button {
+  padding: 10px 20px;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 100px;
+  white-space: nowrap; 
+  margin-top: -50px;
+  margin-left: 1px;
+  margin-bottom: 40px;
+  font-size: 15px;
+  
+}
+
+.button-container button:hover {
+  background-color: #004d84;
+}
+
+
+
+.chart-container {
+  position: relative;
+  margin: 30px auto; /* This centers the box horizontally */
+  background-color: #f6f6f6;
+  padding: 20px;
+  border-radius: 10px;
+  width: 600px;       /* Add px unit */
+  height: 300px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+.chart-controls {
+  display: flex;
+  flex-wrap: wrap;       /* wrap on smaller screens */
+  align-items: center;
+  gap: 80px;             /* spacing between controls */
+  margin-bottom: 20px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;  /* keep label above input */
+  align-items: flex-start; /* ✅ left-align label and input */
+  font-size: 14px;
+  gap: 10px; /* small spacing between label and input */
+}
+.control-group label {
+  margin-bottom: 5px;
+  font-weight: 600;
+  align-items: left;
+}
+
+.control-group input,
+.control-group select {
+
+  border: 1px solid #ccc;
+  font-size: 14px;
+  width: 200px; /* increase or decrease width */
+  padding: 8px 12px; /* increase height and padding inside the box */
+  font-size: 16px;   /* larger text inside dropdown */
+  border-radius: 5px; /* optional rounded corners */
+}
+
+.button-container button {
+  padding: 8px 16px;
+  background-color: #035806;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.button-container button:hover {
+  background-color: #45a049;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .chart-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+.print-button {
+  padding: 8px 16px;
+  background-color: #b57721;   /* orange color for print */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  margin-left: 20px;           /* space from Generate Chart button */
+}
+
+.print-button:hover {
+  background-color: #ca8113;   /* darker orange on hover */
+}
+
+.button-container .print-button {
+  padding: 8px 12px;
+  background-color: #df1d1d;   /* orange color for print */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  margin-left: 20px;           /* space from Generate Chart button */
+}
+
+.button-container .print-button:hover {
+  background-color: #db0f0fd3;   /* darker orange on hover */
+}

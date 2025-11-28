@@ -2,7 +2,7 @@ import "./AdminSummary.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-export default function AdminSummary() {
+export default function AdminSummary({activeInverterCount}) {
   // State for live summary from backend
   const [summary, setSummary] = useState({
     totalItems: 0,
@@ -36,9 +36,9 @@ export default function AdminSummary() {
   const summaryData = [
     { label: "Total Installed Solar Capacity", value: `${summary.overallCapacity} kW` },
     { label: "Number of Solar Inverters", value: summary.totalItems },
-    { label: "Active Solar Inverters", value: "1,050" },              // Optional static
-    { label: "Daily Total Solar Generation", value: "1.8 GWh" },     // Optional static
-    { label: "Daily Peak Solar Generation", value: "320 MW" },       // Optional static
+    { label: "Active Solar Inverters", value: `${activeInverterCount}` },              // Optional static
+    { label: "Daily Total Solar Generation", value: "235 kWh" },     // Optional static
+    { label: "Daily Peak Solar Generation", value: "6.5 kW" },       // Optional static
   ];
 
   if (loading) return <div>Loading summary...</div>;

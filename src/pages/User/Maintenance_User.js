@@ -1,24 +1,24 @@
 import { useLocation } from 'react-router-dom';
-import './Maintenance.css';
+import './Maintenance_User.css';
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools, FaUsers, FaCog, FaQuestionCircle, FaUserCircle, FaBell, FaSignOutAlt, FaLocationArrow} from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
-const mockAlarms = [
-  { id: 1, time: '2025-05-05 09:32', inverter: 'Inverter A', message: 'Overtemperature detected', severity: 'High' },
-  { id: 2, time: '2025-05-05 08:45', inverter: 'Inverter B', message: 'Voltage fluctuation', severity: 'Medium' },
-  { id: 3, time: '2025-05-04 18:17', inverter: 'Inverter C', message: 'Grid disconnect', severity: 'Critical' },
-];
 
-export default function Maintenance() {
+
+export default function Maintenance_User() {
 
 
   const location = useLocation();
-  const username = location.state?.username;
+  const username = location.state?.userName;
   const firstName = location.state?.firstName;
   const role = location.state?.role;
   const inverterAccess = location.state?.inverterAccess;
+
+   const [alarms, setAlarms] = useState([]);
+  const apiUrl = process.env.REACT_APP_API_URL;
 
 const [dropdownOpen, setDropdownOpen] = useState(false); 
   
@@ -32,6 +32,23 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
       // clear tokens or session here if any
       navigate('/Loginpage');
     };
+
+useEffect(() => {
+  const fetchAlarms = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/maintenance`);
+      const data = await response.json();
+      console.log("Fetched maintenance logs:", data);
+      setAlarms(data);
+    } catch (error) {
+      console.error("Failed to fetch maintenance data:", error);
+    }
+  };
+
+  fetchAlarms();
+}, []);
+
+
   return (
 
     <div className="dashboard-container">
@@ -51,11 +68,10 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
       
               {dropdownOpen && (
                 <div className="dropdown-menu">
- <div className="dropdown-item" onClick={() => navigate('/profile', {
-   state: { username, firstName }
- })}>
-   <FaUserCircle className="dropdown-icon" /> Profile
- </div>
+              <div className="dropdown-item" onClick={() => navigate('/Profile_User', {state: {userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess}})}>
+                <FaUserCircle className="dropdown-icon" />
+                Profile
+              </div>
         <div className="dropdown-item">
           <FaCog className="dropdown-icon" />
           Settings
@@ -83,13 +99,13 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
               <FaTachometerAlt className="sidebar-icon" /> Dashboard
             </NavLink>
             
-            <NavLink to="/analytics1" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaChartBar className="sidebar-icon" /> Analytics / Reports</NavLink>
-            <NavLink to="/DeviceMap" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaLocationArrow className="sidebar-icon" /> Inverter Map</NavLink>
-            <NavLink to="/Available_Inverter" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaSolarPanel className="sidebar-icon" /> Devices / Inverters</NavLink>
-            <NavLink to="/Maintenance" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaTools className="sidebar-icon" /> Maintenance / Alerts</NavLink>
-            <NavLink to="/Users" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaUsers className="sidebar-icon" /> Users / Roles</NavLink>
-            <NavLink to="/Settings" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaCog className="sidebar-icon" /> Settings</NavLink>
-            <NavLink to="/support" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaQuestionCircle className="sidebar-icon" /> Support / Help</NavLink>
+              <NavLink to="/analytics1_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaChartBar className="sidebar-icon" /> Analytics / Reports</NavLink>
+              <NavLink to="/Devices_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaLocationArrow className="sidebar-icon" /> Generation Status</NavLink>
+              <NavLink to="/Available_Inverter_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaSolarPanel className="sidebar-icon" /> Inverter Status</NavLink>
+               <NavLink to="/LoadFlow_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaUsers className="sidebar-icon" /> Load Management</NavLink>
+              <NavLink to="/Maintenance_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaTools className="sidebar-icon" /> Maintenance / Alerts</NavLink>
+              <NavLink to="/Settings_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaCog className="sidebar-icon" /> Settings</NavLink>
+              <NavLink to="/support_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaQuestionCircle className="sidebar-icon" /> Support / Help</NavLink>
           </nav>
         </aside>
 
@@ -108,13 +124,16 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
           <div>Message</div>
           <div>Severity</div>
         </div>
-        {mockAlarms.map((alarm) => (
-          <div key={alarm.id} className={`alarm-row ${alarm.severity.toLowerCase()}`}>
-            <div>{alarm.time}</div>
-            <div>{alarm.inverter}</div>
-            <div>{alarm.message}</div>
-            <div>{alarm.severity}</div>
-          </div>
+        {alarms
+  .filter((alarm) => alarm.InverterId === inverterAccess)
+  .map((alarm) => (
+
+<div key={alarm.id} className={`alarm-row ${alarm.severity?.toLowerCase()}`}>
+    <div>{alarm.createdAt ? new Date(alarm.createdAt._seconds * 1000).toLocaleString() : "—"}</div>
+    <div>{alarm.InverterId}</div>
+    <div>{alarm.Message}</div>
+    <div>{alarm.severity}</div>
+</div>
         ))}
       </div>
       </section>
