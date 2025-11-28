@@ -12,7 +12,7 @@ export default function AddInverter() {
   const location = useLocation();
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
-  const username = location.state?.username;
+  const username = location.state?.userName;
   const firstName = location.state?.firstName;
   const role = location.state?.role;
   const inverterAccess = location.state?.inverterAccess;
@@ -21,7 +21,7 @@ export default function AddInverter() {
 
   const apiUrl = process.env.REACT_APP_API_URL;
    
-    
+const defaultPosition = [6.9271, 79.8612]; 
 
   const [inverterData, setInverterData] = useState({
     id: '',
@@ -142,11 +142,10 @@ const handleRedirectToMap = () => {
           <span className="dropdown-arrow" onClick={toggleDropdown}>▼</span>
           {dropdownOpen && (
                               <div className="dropdown-menu" ref={dropdownRef}>
-                   <div className="dropdown-item" onClick={() => navigate('/profile', {
-                     state: { username, firstName }
-                   })}>
-                     <FaUserCircle className="dropdown-icon" /> Profile
-                   </div>
+              <div className="dropdown-item" onClick={() => navigate('/Profile', {state: {userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess}})}>
+                <FaUserCircle className="dropdown-icon" />
+                Profile
+              </div>
                      <div className="dropdown-item">
                        <FaCog className="dropdown-icon" />
                        Settings

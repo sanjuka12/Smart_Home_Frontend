@@ -13,6 +13,8 @@ export default function DataLog() {
   const role = location.state?.role;
   const inverterAccess = location.state?.inverterAccess;
 
+  const navigate = navigate();
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [solarData, setSolarData] = useState([]);
   const [batteryData, setBatteryData] = useState([]);
@@ -142,8 +144,9 @@ const handleView = () => {
 
           {dropdownOpen && (
             <div className="dropdown-menu">
-              <div className="dropdown-item">
-                <FaUserCircle className="dropdown-icon" /> Profile
+              <div className="dropdown-item" onClick={() => navigate('/Profile', {state: {userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess}})}>
+                <FaUserCircle className="dropdown-icon" />
+                Profile
               </div>
               <div className="dropdown-item">
                 <FaCog className="dropdown-icon" /> Settings

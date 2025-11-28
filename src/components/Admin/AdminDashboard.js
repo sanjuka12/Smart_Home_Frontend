@@ -3,11 +3,11 @@ import React, { useState, useRef, useEffect } from "react";
 import "./AdminDashboard.css";
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { FaChartBar, FaSolarPanel, FaTools, FaUsers, FaCog, FaQuestionCircle, FaUserCircle, FaBell, FaSignOutAlt, FaTachometerAlt, FaLocationArrow } from 'react-icons/fa';
-import AdminPowerFlowDiagram from "../components/AdminPowerFlowDiagram";
-import AdminPowerChart from "../components/AdminPowerChart";
-import AdminWeatherforecast from "../components/AdminWeatherforecast";
-import AdminSummary from "../components/AdminSummary";
-import Profile from "../pages/Profile";
+import AdminPowerFlowDiagram from "./AdminPowerFlowDiagram";
+import AdminPowerChart from "./AdminPowerChart";
+import AdminWeatherforecast from "./AdminWeatherforecast";
+import AdminSummary from "./AdminSummary";
+import Profile from "../../pages/Admin/Profile";
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import axios from "axios";
@@ -18,12 +18,14 @@ import io from "socket.io-client";
 
 export default function AdminDashboard() {
   const location = useLocation();
-  const username = location.state?.username;
+  const username = location.state?.userName;
   const firstName = location.state?.firstName;
   const role = location.state?.role;
   const inverterAccess = location.state?.inverterAccess;
 
   const navigate = useNavigate();
+  const [activeInverterCount, setActiveInverterCount] = useState(0);
+
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   
@@ -33,6 +35,13 @@ export default function AdminDashboard() {
   const [totalSolarPower, setTotalSolarPower] = useState(0);
   const [inverters, setInverters] = useState([]);
   const [socket, setSocket] = useState(null);
+  const [solarGenMax, setSolarGenMax] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [summary, setSummary] = useState({
+    totalItems: 0,
+    overallCapacity: 0,
+  });
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -72,12 +81,16 @@ useEffect(() => {
                   ...inv,
                   Status: liveData.gridStatus || inv.Status,
                   Generation: liveData.power ? liveData.power * 1000 : inv.Generation,
+                  lastUpdate: Date.now(),
                 }
               : inv
           );
 
           const totalPower = updated.reduce((sum, inv) => sum + (inv.Generation || 0), 0);
           setTotalSolarPower(totalPower);
+          const now = Date.now();
+        const activeCount = updated.filter(inv => now - (inv.lastUpdate || 0) < 10000).length;
+        setActiveInverterCount(activeCount);
 
           return updated;
         });
@@ -122,7 +135,24 @@ useEffect(() => {
   };
 }, []);
 
+ useEffect(() => {
+    const fetchInverterSummary = async () => {
+      try {
+        const res = await axios.get(`${apiUrl}/inverters/summary`);
+        const { totalItems, overallCapacity } = res.data;
 
+        setSummary({ totalItems, overallCapacity });
+        setSolarGenMax(overallCapacity * 1000); // ✅ dynamically update max generation
+        setLoading(false);
+      } catch (err) {
+        console.error("Failed to fetch inverter summary:", err);
+        setError("Could not load inverter summary");
+        setLoading(false);
+      }
+    };
+
+    fetchInverterSummary();
+  }, [apiUrl]);
 
 
 const handleLogout = () => {
@@ -130,7 +160,7 @@ const handleLogout = () => {
   navigate('/Loginpage');
 };
 
-const solarGenMax = 3000; // example maximum value
+ // example maximum value
      
 
 
@@ -152,11 +182,11 @@ const solarGenMax = 3000; // example maximum value
 
           {dropdownOpen && (
             <div className="dropdown-menu" ref={dropdownRef}>
-              <div className="dropdown-item" onClick={() => navigate('/Profile', {state: { username, firstName }})}>
+              <div className="dropdown-item" onClick={() => navigate('/Profile', {state: {userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess}})}>
                 <FaUserCircle className="dropdown-icon" />
                 Profile
               </div>
-              <div className="dropdown-item">
+              <div className="dropdown-item" onClick={() => navigate('/Settings', {state: {userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess}})}>
                 <FaCog className="dropdown-icon" />
                 Settings
               </div>
@@ -274,7 +304,10 @@ const solarGenMax = 3000; // example maximum value
       </div>
 
 <div className="admin-dashboard-card">
-       <AdminSummary/>
+       <AdminSummary
+    activeInverterCount={activeInverterCount}
+    //totalSolarPower={totalSolarPower}
+  />
       </div>
       <div className="admin-dashboard-card">
         <AdminWeatherforecast/>

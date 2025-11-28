@@ -11,7 +11,7 @@ import {
   buildStyles
 } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import "./Devices.css";
+import "./Devices_User.css";
 import { io } from "socket.io-client";
 
 
@@ -38,13 +38,13 @@ const mapBatteryStatus = (statusCode) => {
   return statusMap[statusCode] || "Unknown";
 };
 
-const Devices = () => {
+const Devices_User = () => {
   const location = useLocation();
-  const username = location.state?.username;
+  const username = location.state?.userName;
   const firstName = location.state?.firstName;
   const role = location.state?.role;
   const inverterAccess = location.state?.inverterAccess;
-  const inverterId = location.state?.inverterId;
+  const inverterId = location.state?.inverterAccess;
   const inverterName = location.state?.inverterName;
 
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -67,59 +67,10 @@ const Devices = () => {
     navigate('/Loginpage');
   };
 
-  //Communication with the help of the database...
 
-//  const fetchInverterData = async () => {
-//   try {
-//     const res = await axios.get(`http://localhost:3000/livedata/${inverterId}`);
-//     console.log('Fetched inverter live data:', res.data);
-
-//     // Example assuming res.data structure matches these fields:
-//     setSolarData({
-//       gridStatus: mapGridStatus(res.data.gridStatus),
-//       voltage: res.data.voltage,
-//       current: res.data.current,
-//       frequency: res.data.frequency,
-//       solarpower:res.data.solarpower,
-//     });
-
-
-
-
-//     setBatteryPercentage(res.data.batteryPercentage || 0); // update battery %
-//   } catch (err) {
-//     console.error('Failed to fetch data:', err);
-//   }
-// };
-
-
-// const fetchBatteryData = async () => {
-//   try {
-//     const res = await axios.get(`http://localhost:3000/realtimebatterydata/${inverterId}`);
-//     console.log('Fetched battery live data:', res.data);
-
-//     setBatteryData({
-//       gridStatus: mapBatteryStatus(res.data.gridStatus),
-//       voltage: res.data.voltage,
-//       current: res.data.current,
-//       power: res.data.power,
-//       soc: res.data.soc,
-//       timestamp: res.data.timestamp,
-//     });
-//   } catch (error) {
-//     console.error('Error fetching battery live data:', error);
-//   }
-// };
 
  useEffect(() => {
   if (!inverterId) return;
-
-  // const socket = io(`${apiUrl}`, {
-  //   transports: ["websocket"], // ensure WebSocket transport
-  // });
-
-  //const socket = io("http://147.93.30.1:3000", { transports: ["websocket"] });
-
 
   const socket = io("http://147.93.30.1:3000", { transports: ["websocket"] });
 
@@ -137,7 +88,7 @@ const Devices = () => {
 
     if (liveData.type === "solar") {
       setSolarData({
-        gridStatus: mapGridStatus(liveData.gridStatus),
+        gridStatus: liveData.gridStatus,
         voltage: liveData.voltage,
         current: liveData.current,
         frequency: liveData.frequency,
@@ -147,7 +98,7 @@ const Devices = () => {
 
     if (liveData.type === "battery") {
       setBatteryData({
-        gridStatus: mapBatteryStatus(liveData.gridStatus),
+        gridStatus: liveData.gridStatus,
         voltage: liveData.voltage,
         current: liveData.current,
         power: liveData.power,
@@ -184,10 +135,9 @@ const Devices = () => {
 
           {dropdownOpen && (
             <div className="dropdown-menu">
-              <div className="dropdown-item" onClick={() => navigate('/profile', {
-                state: { username, firstName }
-              })}>
-                <FaUserCircle className="dropdown-icon" /> Profile
+              <div className="dropdown-item" onClick={() => navigate('/Profile_User', {state: {userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess}})}>
+                <FaUserCircle className="dropdown-icon" />
+                Profile
               </div>
               <div className="dropdown-item"><FaCog className="dropdown-icon" /> Settings</div>
               <div className="dropdown-item" onClick={handleLogout}><FaSignOutAlt className="dropdown-icon" /> Logout</div>
@@ -207,14 +157,14 @@ const Devices = () => {
                         >
                           <FaTachometerAlt className="sidebar-icon" /> Dashboard
                         </NavLink>
-                        
-                        <NavLink to="/analytics1" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaChartBar className="sidebar-icon" /> Analytics / Reports</NavLink>
-                        <NavLink to="/DeviceMap" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaLocationArrow className="sidebar-icon" /> Inverter Map</NavLink>
-                        <NavLink to="/Available_Inverter" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaSolarPanel className="sidebar-icon" /> Devices / Inverters</NavLink>
-                        <NavLink to="/Maintenance" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaTools className="sidebar-icon" /> Maintenance / Alerts</NavLink>
-                        <NavLink to="/Users" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaUsers className="sidebar-icon" /> Users / Roles</NavLink>
-                        <NavLink to="/Settings" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaCog className="sidebar-icon" /> Settings</NavLink>
-                        <NavLink to="/support" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaQuestionCircle className="sidebar-icon" /> Support / Help</NavLink>
+
+            <NavLink to="/analytics1_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaChartBar className="sidebar-icon" /> Analytics / Reports</NavLink>
+             <NavLink to="/Devices_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaLocationArrow className="sidebar-icon" /> Generation Status</NavLink>
+             <NavLink to="/Available_Inverter_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaSolarPanel className="sidebar-icon" /> Inverter Status</NavLink>
+            <NavLink to="/LoadFlow_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaUsers className="sidebar-icon" /> Load Management</NavLink>
+             <NavLink to="/Maintenance_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaTools className="sidebar-icon" /> Maintenance / Alerts</NavLink>
+             <NavLink to="/Settings_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaCog className="sidebar-icon" /> Settings</NavLink>
+             <NavLink to="/support_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaQuestionCircle className="sidebar-icon" /> Support / Help</NavLink>
                       </nav>
         </aside>
 
@@ -315,5 +265,5 @@ const Devices = () => {
   );
 };
 
-export default Devices;
+export default Devices_User;
 

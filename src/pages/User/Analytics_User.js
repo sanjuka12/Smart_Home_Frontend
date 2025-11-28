@@ -3,7 +3,7 @@ import { FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools, FaUsers, FaCog, FaQ
 import { useLocation, useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import axios from "axios";
-import './Analytics.css';
+import './Analytics_User.css';
 import { useRef } from 'react';
 
 
@@ -21,7 +21,7 @@ import {
 
 
 
-export default function Analytics() {
+export default function Analytics_User() {
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -86,7 +86,7 @@ console.log("Final chartData:", formatted);
 
 
 useEffect(() => {
-  axios.get(`${apiUrl}/realtimebatterydata`)
+  axios.get(`${apiUrl}/batteryinverterdata`)
     .then(response => {
       const todayMidnight = new Date();
       todayMidnight.setHours(0, 0, 0, 0);
@@ -155,11 +155,10 @@ const handleLogout = () => {
 
          {dropdownOpen && (
                     <div className="dropdown-menu" ref={dropdownRef}>
-         <div className="dropdown-item" onClick={() => navigate('/profile', {
-           state: { username, firstName }
-         })}>
-           <FaUserCircle className="dropdown-icon" /> Profile
-         </div>
+              <div className="dropdown-item" onClick={() => navigate('/Profile_User', {state: {userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess}})}>
+                <FaUserCircle className="dropdown-icon" />
+                Profile
+              </div>
            <div className="dropdown-item">
              <FaCog className="dropdown-icon" />
              Settings
@@ -187,13 +186,13 @@ const handleLogout = () => {
               <FaTachometerAlt className="sidebar-icon" /> Dashboard
             </NavLink>
            
-            <NavLink to="/analytics1" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaChartBar className="sidebar-icon" /> Analytics / Reports</NavLink>
-            <NavLink to="/DeviceMap" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaLocationArrow className="sidebar-icon" /> Inverter Map</NavLink>
-            <NavLink to="/Available_Inverter" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaSolarPanel className="sidebar-icon" /> Devices / Inverters</NavLink>
-            <NavLink to="/Maintenance" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaTools className="sidebar-icon" /> Maintenance / Alerts</NavLink>
-            <NavLink to="/Users" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaUsers className="sidebar-icon" /> Users / Roles</NavLink>
-            <NavLink to="/Settings" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaCog className="sidebar-icon" /> Settings</NavLink>
-            <NavLink to="/support" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaQuestionCircle className="sidebar-icon" /> Support / Help</NavLink>
+            <NavLink to="/analytics1_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaChartBar className="sidebar-icon" /> Analytics / Reports</NavLink>
+            <NavLink to="/Devices_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaLocationArrow className="sidebar-icon" /> Generation Status</NavLink>
+            <NavLink to="/Available_Inverter_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaSolarPanel className="sidebar-icon" /> Inverter Status</NavLink>
+            <NavLink to="/LoadFlow_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaUsers className="sidebar-icon" /> Load Management</NavLink>
+            <NavLink to="/Maintenance_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaTools className="sidebar-icon" /> Maintenance / Alerts</NavLink>
+            <NavLink to="/Settings_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaCog className="sidebar-icon" /> Settings</NavLink>
+            <NavLink to="/support_User" state={{ userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess }} className="sidebar-link"><FaQuestionCircle className="sidebar-icon" /> Support / Help</NavLink>
           </nav>
         </aside>
 
@@ -245,7 +244,7 @@ const handleLogout = () => {
                       <Legend />
                       <Line 
   type="monotone" 
-  dataKey="battery" 
+  dataKey="soc" 
   stroke="Blue" 
   name="Battery SOC (%)" 
   dot={false}                 // hides all dots

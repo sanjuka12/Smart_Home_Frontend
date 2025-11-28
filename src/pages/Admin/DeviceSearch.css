@@ -1,0 +1,145 @@
+/* Fullscreen overlay with blur */
+.device-search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px); /* blur background */
+  background-color: rgba(0, 0, 0, 0.2); /* semi-transparent dark overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Center popup container */
+.device-search-container {
+  width: 380px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 30px 35px 40px 35px;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  position: relative;
+  animation: slideUp 0.35s ease-in-out;
+}
+
+/* Popup title */
+.popup-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 25px;
+}
+
+/* Search wheel */
+.search-wheel {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border: 6px solid #4698ef;
+  border-top: 6px solid #0019a3;
+  border-radius: 50%;
+  margin: 0 auto 25px auto;
+  box-shadow: 0 0 15px rgba(6, 77, 99, 0.3);
+  transition: all 1s ease;
+}
+
+.rotate {
+  animation: spin 2s linear infinite;
+}
+
+/* Arrow in center */
+.center-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #007bff;
+  font-size: 2.2rem;
+  transition: color 0.3s ease;
+}
+
+.search-wheel.rotate .center-icon {
+  color: #00c3ff;
+}
+
+/* Buttons */
+.search-btn {
+  background: linear-gradient(135deg, #007bff, #00c3ff);
+  color: #fff;
+  margin: 20px auto;
+  border: none;
+  border-radius: 25px;
+  width: 180px;
+  padding: 12px 26px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+}
+
+.search-btn:hover {
+  background: linear-gradient(135deg, #0064d6, #00a8f7);
+  transform: translateY(-2px);
+}
+
+.search-btn:disabled {
+  background: #a7c5eb;
+  cursor: not-allowed;
+}
+
+/* Close button */
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  color: #777;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+
+/* Animations */
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(25px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.found-list {
+  margin-top: 15px;
+  background: #f8fff0;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.found-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.found-list li {
+  color: #0a7b0a;
+  font-weight: 500;
+  margin: 5px 0;
+}
+
