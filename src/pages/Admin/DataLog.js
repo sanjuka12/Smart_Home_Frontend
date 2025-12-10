@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./DataLog.css";
-import { NavLink, useLocation } from 'react-router-dom';
+
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+
 import { 
   FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools, FaUsers, FaCog, 
   FaQuestionCircle, FaUserCircle, FaBell, FaSignOutAlt, FaLocationArrow
@@ -13,7 +15,7 @@ export default function DataLog() {
   const role = location.state?.role;
   const inverterAccess = location.state?.inverterAccess;
 
-  const navigate = navigate();
+  const navigate = useNavigate();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [solarData, setSolarData] = useState([]);
