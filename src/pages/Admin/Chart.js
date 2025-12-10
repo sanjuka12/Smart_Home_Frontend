@@ -96,9 +96,10 @@ const yValues = data.map(item => Number(item[yAxis] || 0));
 
 setChartData({
     datasets: [{
-        label: `${yAxis} vs ${xAxis}`,
+        //label: `${yAxis} vs ${xAxis}`,
+        label: `${yAxis} vs ${xAxis} (Last 24 hours)`,
         data: chartPoints,
-        borderColor: 'rgb(75, 192, 192)',
+        borderColor: 'rgba(245, 3, 3, 1)',
         fill: false,
         tension: 0.1
     }]
@@ -111,13 +112,15 @@ setChartData({
             title: { display: true, text: `${yAxis.toUpperCase()} vs ${xAxis.toUpperCase()}` },
         },
         scales: {
-            x: {
-                type: xAxis === "time" ? "time" : "linear",
-                time: xAxis === "time" ? { unit: 'hour', displayFormats: { hour: 'HH:mm' } } : undefined,
-                title: { display: true, text: xAxis.toUpperCase() },
-                min: xMin,
-                max: xMax
-            },
+x: {
+    type: xAxis === "time" ? "time" : "linear",
+    time: xAxis === "time" ? { unit: 'hour', displayFormats: { hour: 'HH:mm' } } : undefined,
+    title: { display: true, text: xAxis.toUpperCase() },
+
+    // ✅ FIX: Only apply min/max when X-axis is time
+    min: xAxis === "time" ? xMin : undefined,
+    max: xAxis === "time" ? xMax : undefined
+},
             y: {
                 title: { display: true, text: yAxis.toUpperCase() },
                 min: yMin,
@@ -249,7 +252,7 @@ const handlePrint = () => {
                 <select value={Inverters} onChange={(e) => setInverters(e.target.value)}>
                 
                   <option value="INV001">INV001</option>
-                  <option value="INV002">INV003</option>
+                  <option value="INV003">INV003</option>
                 </select>
               </div>
 
