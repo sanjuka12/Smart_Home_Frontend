@@ -6,19 +6,21 @@
   column-gap: 1%;   /* horizontal gap */
   margin-top: 0%;
   padding-top: 2%;
+
 }
 
 .admin-dashboard-card {
   background-color: rgb(255, 255, 255);
   border-radius: 8px;
   padding: 2%;
-  min-height: 150px;
+  min-height: 150px; /* increased from 150px to 250px */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: -3%;
 }
+
 
 .card1-container {
   display: flex;

@@ -31,6 +31,8 @@ export default function Chart_User() {
   const role = location.state?.role;
   const inverterAccess = location.state?.inverterAccess;
 
+  const navigate = useNavigate();
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -43,8 +45,6 @@ export default function Chart_User() {
   const [chartData, setChartData] = useState({});
   const [chartOptions, setChartOptions] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
-
-  const navigate = useNavigate();
 
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]); // default today
 
@@ -96,11 +96,14 @@ const yValues = data.map(item => Number(item[yAxis] || 0));
 
 setChartData({
     datasets: [{
-        label: `${yAxis} vs ${xAxis}`,
+        //label: `${yAxis} vs ${xAxis}`,
+        label: `${yAxis} vs ${xAxis} (Last 24 hours)`,
         data: chartPoints,
-        borderColor: 'rgb(75, 192, 192)',
+        borderColor: 'rgba(245, 3, 3, 1)',
         fill: false,
-        tension: 0.1
+        tension: 0.1,
+        pointRadius: 0,
+        dots:false
     }]
 });
 
@@ -111,13 +114,15 @@ setChartData({
             title: { display: true, text: `${yAxis.toUpperCase()} vs ${xAxis.toUpperCase()}` },
         },
         scales: {
-            x: {
-                type: xAxis === "time" ? "time" : "linear",
-                time: xAxis === "time" ? { unit: 'hour', displayFormats: { hour: 'HH:mm' } } : undefined,
-                title: { display: true, text: xAxis.toUpperCase() },
-                min: xMin,
-                max: xMax
-            },
+x: {
+    type: xAxis === "time" ? "time" : "linear",
+    time: xAxis === "time" ? { unit: 'hour', displayFormats: { hour: 'HH:mm' } } : undefined,
+    title: { display: true, text: xAxis.toUpperCase() },
+
+    // ✅ FIX: Only apply min/max when X-axis is time
+    min: xAxis === "time" ? xMin : undefined,
+    max: xAxis === "time" ? xMax : undefined
+},
             y: {
                 title: { display: true, text: yAxis.toUpperCase() },
                 min: yMin,
@@ -193,7 +198,7 @@ const handlePrint = () => {
 
           {dropdownOpen && (
             <div className="dropdown-menu">
-              <div className="dropdown-item" onClick={() => navigate('/Profile_User', {state: {userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess}})}>
+              <div className="dropdown-item" onClick={() => navigate('/Profile', {state: {userName: username, firstName: firstName, role:role, inverterAccess:inverterAccess}})}>
                 <FaUserCircle className="dropdown-icon" />
                 Profile
               </div>
@@ -247,9 +252,9 @@ const handlePrint = () => {
               <div className="control-group">
                 <label>Select Inverter:</label>
                 <select value={Inverters} onChange={(e) => setInverters(e.target.value)}>
-                 
+                
                   <option value="INV001">INV001</option>
-                  <option value="INV002">INV003</option>
+                  <option value="INV003">INV003</option>
                 </select>
               </div>
 
