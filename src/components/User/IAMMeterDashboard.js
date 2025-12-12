@@ -161,7 +161,8 @@ const handleLogout = () => {
   <WeatherForecast small />
 </div>
               <div className="power-and-analysis-container">
-              <PowerChart />
+              
+              <PowerChart UnitId={inverterAccess} />
               <EnergyAnalysis UnitId={inverterAccess} />
 
 </div>

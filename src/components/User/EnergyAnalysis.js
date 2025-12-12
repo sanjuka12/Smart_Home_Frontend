@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import "./IAMMeterDashboard.css"; // Reuse existing styles
 
-export default function EnergyAnalysis({ UnitId }) {
+export default function EnergyAnalysis({UnitId}) {
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -12,10 +12,10 @@ const apiUrl = process.env.REACT_APP_API_URL;
     const fetchTodayEnergy = async () => {
       try {
         const res = await fetch(
-          `${apiUrl}/today-energy?unitId=${UnitId}`
+          `${apiUrl}/today-energy?UnitId=${UnitId}`
         );
         const data = await res.json();
-        setEnergy(data.energyToday || "0.00");
+        setEnergy(data.energyToday || "N/A");
       } catch (error) {
         console.error("Error fetching today's energy", error);
       }

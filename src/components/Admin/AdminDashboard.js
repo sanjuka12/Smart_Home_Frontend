@@ -313,7 +313,7 @@ const handleLogout = () => {
         <AdminWeatherforecast/>
       </div>
       <div className="admin-dashboard-card">
-         <AdminPowerChart/>
+         <AdminPowerChart inverterAccess={inverterAccess} />
       </div>
       
     </div>

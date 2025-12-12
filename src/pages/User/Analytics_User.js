@@ -41,13 +41,19 @@ export default function Analytics_User() {
 const [chartData, setChartData] = useState([]);
 const [batteryData, setBatteryData] = useState([]);
 
-  const handleAddChart = () => {
-    navigate('/Chart', { state: { username, firstName } });
-  };
+const handleAddChart = () => {
+  navigate('/Chart', { 
+    state: { 
+      userName: username,   // match Chart_User key
+      firstName: firstName,
+      role: role,
+      inverterAccess: inverterAccess
+    } 
+  });
+};
 
 
-
- useEffect(() => {
+useEffect(() => {
   axios.get(`${apiUrl}/solarinverterdata`)
     .then(response => {
       const todayMidnight = new Date();
@@ -57,33 +63,31 @@ const [batteryData, setBatteryData] = useState([]);
         .filter(item => {
           const ts = item.timestamp;
           const date = ts && ts._seconds ? new Date(ts._seconds * 1000) : null;
-          return date && date >= todayMidnight;
+          const matchesUnit = item.UnitId === inverterAccess; // <-- filter here
+          return date && date >= todayMidnight && matchesUnit;
         })
         .map(item => {
           const ts = item.timestamp;
-          const date = new Date(ts._seconds * 1000);  // convert Firestore timestamp to JS Date
+          const date = new Date(ts._seconds * 1000);
           const minutes = date.getHours() * 60 + date.getMinutes();
 
           return {
             time: minutes,
             timeLabel: date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             inverter: Number(item.solarpower) || 0,
-            battery: 60 + Math.floor(Math.random() * 20), // Dummy battery %
-            load: 500 + Math.floor(Math.random() * 2000), // Dummy load
             gridStatus: item.gridStatus,
             voltage: item.voltage,
             current: item.current,
             frequency: item.frequency
           };
         });
-console.log("Final chartData:", formatted);
+
       setChartData(formatted);
     })
     .catch(error => {
       console.error('Error fetching inverter data:', error);
     });
-}, []);
-
+}, [apiUrl, inverterAccess]); // <-- add inverterAccess as dependency
 
 useEffect(() => {
   axios.get(`${apiUrl}/batteryinverterdata`)
@@ -95,7 +99,8 @@ useEffect(() => {
         .filter(item => {
           const ts = item.timestamp;
           const date = ts && ts._seconds ? new Date(ts._seconds * 1000) : null;
-          return date && date >= todayMidnight;
+          const matchesUnit = item.UnitId === inverterAccess; // filter by inverterAccess
+          return date && date >= todayMidnight && matchesUnit;
         })
         .map(item => {
           const ts = item.timestamp;
@@ -105,21 +110,21 @@ useEffect(() => {
           return {
             time: minutes,
             timeLabel: date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            soc: Number(item.soc) || 0,  // state of charge %
+            soc: Number(item.soc) || 0,  // Battery SOC %
             voltage: item.voltage,
             current: item.current,
             power: item.power,
-            gridStatus: item.gridStatus,
+            gridStatus: item.gridStatus
           };
         });
 
-      console.log("Final batteryData:", formattedBattery);
       setBatteryData(formattedBattery);
     })
     .catch(error => {
       console.error('Error fetching battery data:', error);
     });
-}, [apiUrl]);
+}, [apiUrl, inverterAccess]); // add inverterAccess as dependency
+
 
   // **NEW: get current time in minutes for X axis domain**
   const now = new Date();
@@ -221,41 +226,7 @@ const handleLogout = () => {
 
 </div>
 
-
-
-            {/* Top Row: Battery and Inverter Side by Side */}
-            <div style={{ display: 'flex', gap: '20px', marginBottom: '10px' }}>
-              {/* Battery Chart */}
-              <div style={{ flex: 1 }}>
-                <div className="chart-section">
-                  <h2 className="chart-title">Battery Status Over Time</h2>
-                  <ResponsiveContainer width="100%" height={180}>
-                    <LineChart data={batteryData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis
-                        dataKey="time"  // numeric minutes
-                        type="number"   // **CHANGED TO number for continuous range**
-                        domain={[0, currentMinutes]}  // **set domain from midnight to now**
-                        tickFormatter={formatMinutesToHHMM}  // format ticks back to HH:mm
-                        tick={{ fontSize: 15 }}
-                      />
-                      <YAxis unit="%" tick={{ fontSize: 15 }} />
-                      <Tooltip labelFormatter={formatMinutesToHHMM} />
-                      <Legend />
-                      <Line 
-  type="monotone" 
-  dataKey="soc" 
-  stroke="Blue" 
-  name="Battery SOC (%)" 
-  dot={false}                 // hides all dots
-  activeDot={{ r: 6, strokeWidth: 2, stroke: '#4fc1e9', fill: 'white' }}  // visible on hover with styling
-/>
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-
-              {/* Inverter Chart */}
+ {/* Inverter Chart */}
               <div style={{ flex: 1 }}>
                 <div className="chart-section">
                   <h2 className="chart-title">Inverter Output Over Time</h2>
@@ -284,7 +255,59 @@ const handleLogout = () => {
                   </ResponsiveContainer>
                 </div>
               </div>
-            </div>
+          
+
+
+           {/* Battery Chart */}
+<div style={{ flex: 1, position: 'relative' }}>
+  <div className="chart-section">
+    <h2 className="chart-title">Battery Status Over Time</h2>
+    {batteryData.length > 0 ? (
+      <ResponsiveContainer width="100%" height={180}>
+        <LineChart data={batteryData}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis
+            dataKey="time"
+            type="number"
+            domain={[0, currentMinutes]}
+            tickFormatter={formatMinutesToHHMM}
+            tick={{ fontSize: 15 }}
+          />
+          <YAxis unit="%" tick={{ fontSize: 15 }} />
+          <Tooltip labelFormatter={formatMinutesToHHMM} />
+          <Legend />
+          <Line
+            type="monotone"
+            dataKey="soc"
+            stroke="blue"
+            name="Battery SOC (%)"
+            dot={false} // hide dots
+            activeDot={{ r: 6, strokeWidth: 2, stroke: '#4fc1e9', fill: 'white' }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    ) : (
+      // Watermark if no battery data
+      <div
+        style={{
+          width: '100%',
+          height: 180,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#bbb',
+          fontSize: '18px',
+          fontWeight: 'bold',
+          border: '1px dashed #ccc'
+        }}
+      >
+        No Battery Data
+      </div>
+    )}
+ 
+</div>
+  </div>
+ 
 
             {/* Bottom Row: Load Chart Full Width */}
             <div className="chart-section-load">

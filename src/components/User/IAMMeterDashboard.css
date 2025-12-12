@@ -38,7 +38,7 @@ body {
   }
   
    .dashboard-sidebar {
-    background-color: #1e55ec;;
+    background-color: #124def;;
     padding: 20px;
     border-radius: 1px;
     width:auto;
@@ -136,15 +136,15 @@ body {
   }
   
   .green-card {
-    background-color: #2ab793;
+    background-color: #03912e;
   }
   
   .blue-card {
-    background-color: #5d9cec;
+    background-color: #0d60cb;
   }
   
   .red-card {
-    background-color: #ed5565;
+    background-color: #f02236;
   }
   
   .cyan-card {
