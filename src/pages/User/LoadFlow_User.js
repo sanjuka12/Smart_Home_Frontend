@@ -2,6 +2,8 @@ import { useLocation, NavLink } from 'react-router-dom';
 import './LoadFlow_User.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
+
 
 import {
   FaTachometerAlt, FaChartBar, FaSolarPanel, FaTools,
@@ -15,6 +17,7 @@ export default function LoadFlow_User() {
   const firstName = location.state?.firstName;
   const role = location.state?.role;
   const inverterAccess = location.state?.inverterAccess;
+  const inverterId = inverterAccess; // <-- this is invaccess
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [inverterDropdownOpen, setInverterDropdownOpen] = useState(false);
@@ -30,6 +33,83 @@ export default function LoadFlow_User() {
     { name: 'INV003', type: 'On-grid' }
   ]);
 
+  const [solarData, setSolarData] = useState({
+  gridStatus: false,
+  voltage: 0,
+  current: 0,
+  frequency: 0,
+  solarpower: 0,
+});
+
+
+
+  useEffect(() => {
+  if (!inverterId) return;
+
+  const socket = io("http://147.93.30.1:3000", { transports: ["websocket"] });
+
+  socket.on("connect", () => {
+    console.log("✅ Connected to Socket.IO server");
+
+    // Tell server which inverter to subscribe to
+    socket.emit("subscribe", inverterId);
+  });
+
+  socket.on("newData", (liveData) => {
+    console.log("Received live data:", liveData);
+
+    if (liveData.UnitId !== inverterId) return; // safety check
+
+    if (liveData.type === "solar") {
+      setSolarData({
+        gridStatus: liveData.gridStatus,
+        voltage: liveData.voltage,
+        current: liveData.current,
+        frequency: liveData.frequency,
+        solarpower: liveData.power*1000,
+      });
+    }
+
+   if (liveData.type === "battery") {
+  setSystemData(prev => ({
+    ...prev,
+
+    // LOAD ON/OFF STATUS
+    loads: [
+      liveData.loadstatus1 === 1,
+      liveData.loadstatus2 === 1,
+      liveData.loadstatus3 === 1,
+      prev.loads[3] // keep Load 4 unchanged if exists
+    ],
+
+    // LOAD POWER VALUES (convert current → kW if needed)
+    loadsPower: [
+      Number(liveData.current1 || 0),
+      Number(liveData.current2 || 0),
+      Number(liveData.current3 || 0),
+      prev.loadsPower[3]
+    ],
+
+    // battery flow logic (optional but recommended)
+    batteryOnline: true,
+    batteryDischarging: liveData.power > 0,
+    batteryCharging: liveData.power < 0,
+  }));
+}
+
+  });
+
+  socket.on("disconnect", () => {
+    console.log("❌ Disconnected from server");
+  });
+
+  return () => {
+    socket.disconnect();
+  };
+}, [inverterId]);
+
+
+
 
   const navigate = useNavigate();
 
@@ -40,27 +120,14 @@ export default function LoadFlow_User() {
     switchClosed: true,
     batteryCharging: false,
     batteryDischarging: true,
-    loads: [true, false, true, true],
-    loadsPower: [5.4, 0, 3.2, 4.1],
+    loads: [false, false, false, false],
+    loadsPower: [0, 0, 0, 0],
   });
 
   const toggleDropdown = () => setDropdownOpen(v => !v);
   const toggleInverterDropdown = () => setInverterDropdownOpen(v => !v);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('http://localhost:5000/api/system-status');
-        const data = await res.json();
-        setSystemData(prev => ({ ...prev, ...data }));
-      } catch (err) {
-        console.error('Error fetching system data:', err);
-      }
-    };
-    fetchData();
-    const id = setInterval(fetchData, 5000);
-    return () => clearInterval(id);
-  }, []);
+
 
   const busbarEnergized =
     systemData.gridActive ||
@@ -212,7 +279,7 @@ export default function LoadFlow_User() {
                       className={`feeder ${flow.loads[i] ? 'energized' : 'deenergized'}`}
                       stroke={COLORS.feeder}
                       markerEnd={flow.loads[i] ? 'url(#arrowSolid)' : 'url(#arrowGray)'} />
-                    <rect x={Lx - 70} y="622" width="140" height="56" rx="12" ry="12"
+                    <rect x={Lx - 70} y="622" width="180" height="60" rx="12" ry="12"
                       fill={nodeFill(systemData.loads[i])} stroke={COLORS.border} strokeWidth="2" />
                     <text x={Lx} y="654" className="node-label" textAnchor="middle">
                       Load {i + 1}: {systemData.loads[i] ? 'ON' : 'OFF'}
